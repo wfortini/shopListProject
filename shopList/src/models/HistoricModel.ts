@@ -7,8 +7,11 @@ export interface HistoricAttributes{
     id?: string;
     description?: string;
     user?: string;
-    createdAt?: string;
-    updatedAt?: string;
+   dataIncial?: Date;
+   dataFinal?: Date;
+   numHistorico?: number;
+   createdAt?: string;
+   updatedAt?: string;
 }
 
 export interface HistoricInstance extends Sequelize.Instance<HistoricAttributes>, HistoricAttributes {
@@ -31,7 +34,19 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                description:{
                    type: DataTypes.STRING(200),
                    allowNull: false
-               }
+               },
+               dataIncial:{
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            dataFinal:{
+                type: DataTypes.DATE,
+                allowNull: false
+            },
+            numHistorico:{
+                type: DataTypes.INTEGER,
+                allowNull: false
+            }
 
           }, {
               tableName: 'historical'
