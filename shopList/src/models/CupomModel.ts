@@ -1,5 +1,6 @@
 import { BaseModelInterface } from './../interfaces/BaseModelInterface';
 import * as Sequelize  from 'sequelize';
+import { ModelInterface } from '../interfaces/ModelInterface';
 
 export interface CupomAttributes{
 

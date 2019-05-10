@@ -10,6 +10,18 @@ exports.default = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING(200),
             allowNull: false
+        },
+        dataIncial: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        dataFinal: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        numHistorico: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }, {
         tableName: 'historical'
