@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const userTypes = `
 
      type User {
@@ -28,20 +30,15 @@ const userTypes = `
      }
 
 `;
-
+exports.userTypes = userTypes;
 const userQueries = ` 
     users(id: ID!): User
     currentUser: User
 
 `;
-
+exports.userQueries = userQueries;
 const userMutations = `
     createUser(input: UserCreateInput!): User
 
 `;
-
-export {
-    userTypes,
-    userQueries,
-    userMutations
-}
+exports.userMutations = userMutations;
