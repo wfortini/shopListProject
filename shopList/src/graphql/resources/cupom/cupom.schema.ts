@@ -48,7 +48,6 @@ const cupomQuery = `
 `;
 
 const cupomMutation = `
-
      createCupom(nfce : String) : Cupom
 
 `;

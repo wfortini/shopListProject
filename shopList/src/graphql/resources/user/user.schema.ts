@@ -30,7 +30,7 @@ const userTypes = `
 `;
 
 const userQueries = ` 
-    users(id: ID!): User
+    user (id: ID!): User
     currentUser: User
 
 `;
