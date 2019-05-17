@@ -3,6 +3,7 @@ import { Query } from './query';
 import { Mutation } from './mutation';
 import { userTypes } from './resources/user/user.schema';
 import { cupomTypes } from './resources/cupom/cupom.schema';
+import { itemCupomTypes } from './resources/itemCupom/itemCupom.schema';
 
 const SchemaDefinition = `
 
@@ -18,7 +19,8 @@ export default makeExecutableSchema({
         Query,
         Mutation,       
         userTypes,
-        cupomTypes
+        cupomTypes,
+        itemCupomTypes
     ],
     
 });
