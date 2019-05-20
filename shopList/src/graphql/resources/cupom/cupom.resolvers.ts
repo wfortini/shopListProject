@@ -26,7 +26,9 @@ export const cupomResolvers = {
 
        Mutation: {
 
-             createCupom(nfce : String) : Cupom
+             createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
+
+             }
 
        }
 
