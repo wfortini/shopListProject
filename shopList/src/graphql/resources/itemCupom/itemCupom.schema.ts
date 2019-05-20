@@ -9,8 +9,7 @@ const itemCupomTypes = `
         unidade: String
         valorUnitario: Int
         valorTotal: Int 
-        cupom: String 
-        historico: String 
+        cupom: Cupom!         
         createdAt: String
         updated: String
 

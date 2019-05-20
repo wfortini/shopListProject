@@ -14,7 +14,8 @@ const cupomTypes = `
         formaPG: String
         valorPG: String
         dataCompra: String 
-        user: String
+        user: User!
+        historico: Historico
         nfce: String
         itensCupom: [ ItemCupom! ]!
         createdAt: String
@@ -43,7 +44,7 @@ const cupomTypes = `
 
 const cupomQuery = `
 
-    cupons: [ Cupom ]
+    cupons(user: String): [ Cupom ]
     cupom(nfce: String) : Cupom
 
 `;

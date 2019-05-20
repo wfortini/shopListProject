@@ -11,8 +11,7 @@ export interface ItemCupomAttributes{
     unidade?: string;
     valorUnitario?: number;
     valorTotal?: number; 
-    cupom?: string; 
-    historico?: string; 
+    cupom?: string;    
     createdAt?: string;
     updated?: string;
 
@@ -57,11 +56,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             cupom:{
                 type: DataTypes.STRING,
                 allowNull: false
-            },
-            historico:{
-                type: DataTypes.STRING,
-                allowNull: false
-            }
+            }            
 
           }, {
               tableName: 'itens_cupom'
@@ -73,16 +68,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                     allowNull: false,
                     field: 'cupom',
                     name: 'cupom'
-                }
-            })
-        }
-
-        itemCupom.associate = (models: ModelInterface): void =>{
-            itemCupom.belongsTo(models.Historic, {
-                foreignKey:{
-                    allowNull: false,
-                    field: 'historico',
-                    name: 'historico'
                 }
             })
         }
