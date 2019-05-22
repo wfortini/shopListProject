@@ -32,7 +32,7 @@ const userTypes = `
 `;
 exports.userTypes = userTypes;
 const userQueries = ` 
-    users(id: ID!): User
+    user (id: ID!): User
     currentUser: User
 
 `;

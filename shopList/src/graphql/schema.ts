@@ -4,6 +4,7 @@ import { Mutation } from './mutation';
 import { userTypes } from './resources/user/user.schema';
 import { cupomTypes } from './resources/cupom/cupom.schema';
 import { itemCupomTypes } from './resources/itemCupom/itemCupom.schema';
+import { historicoTypes } from './resources/historico/historico.schema';
 
 const SchemaDefinition = `
 
@@ -20,7 +21,8 @@ export default makeExecutableSchema({
         Mutation,       
         userTypes,
         cupomTypes,
-        itemCupomTypes
+        itemCupomTypes,
+        historicoTypes
     ],
     
 });

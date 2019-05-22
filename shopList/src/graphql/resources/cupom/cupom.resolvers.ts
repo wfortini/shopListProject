@@ -1,6 +1,7 @@
 import { CupomInstance } from './../../../models/CupomModel';
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
 import { GraphQLResolveInfo } from "graphql";
+import { Scraping } from '../../../services/scrap-service';
 
 export const cupomResolvers = {
 
@@ -27,7 +28,9 @@ export const cupomResolvers = {
        Mutation: {
 
              createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
-
+                  
+                const scraping = new Scraping();
+                scraping.scrapCupom(nfce);
              }
 
        }

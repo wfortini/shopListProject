@@ -58,6 +58,10 @@ exports.default = (sequelize, DataTypes) => {
         user: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        historico: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
     }, {
         tableName: 'cupons'
@@ -68,6 +72,15 @@ exports.default = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'user',
                 name: 'user'
+            }
+        });
+    };
+    Cupom.associate = (models) => {
+        Cupom.belongsTo(models.Historic, {
+            foreignKey: {
+                allowNull: true,
+                field: 'historico',
+                name: 'historico'
             }
         });
     };

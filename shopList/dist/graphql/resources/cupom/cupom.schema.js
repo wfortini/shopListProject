@@ -16,8 +16,9 @@ const cupomTypes = `
         formaPG: String
         valorPG: String
         dataCompra: String 
-        user: String
-        nfce: String 
+        user: User!        
+        nfce: String
+        itensCupom: [ ItemCupom! ]!
         createdAt: String
         updated: String
       }
@@ -44,13 +45,12 @@ const cupomTypes = `
 exports.cupomTypes = cupomTypes;
 const cupomQuery = `
 
-    cupons: [ Cupom ]
+    cupons(user: String): [ Cupom ]
     cupom(nfce: String) : Cupom
 
 `;
 exports.cupomQuery = cupomQuery;
 const cupomMutation = `
-
      createCupom(nfce : String) : Cupom
 
 `;

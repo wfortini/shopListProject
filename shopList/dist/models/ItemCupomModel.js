@@ -34,10 +34,6 @@ exports.default = (sequelize, DataTypes) => {
         cupom: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        historico: {
-            type: DataTypes.STRING,
-            allowNull: false
         }
     }, {
         tableName: 'itens_cupom'
@@ -48,15 +44,6 @@ exports.default = (sequelize, DataTypes) => {
                 allowNull: false,
                 field: 'cupom',
                 name: 'cupom'
-            }
-        });
-    };
-    itemCupom.associate = (models) => {
-        itemCupom.belongsTo(models.Historic, {
-            foreignKey: {
-                allowNull: false,
-                field: 'historico',
-                name: 'historico'
             }
         });
     };

@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const itemCupomTypes = `
 
       type ItemCupom {
@@ -29,18 +31,13 @@ const itemCupomTypes = `
       }
 
 `;
-
+exports.itemCupomTypes = itemCupomTypes;
 const itemCupomQuery = `
     itensCupom(cupomId: String): [ ItemCupom ]    
 
 `;
-
+exports.itemCupomQuery = itemCupomQuery;
 const itemCupomMutation = `
      
 `;
-
-export {
-    itemCupomTypes,
-    itemCupomQuery,
-    itemCupomMutation
-}
+exports.itemCupomMutation = itemCupomMutation;
