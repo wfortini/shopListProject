@@ -15,22 +15,22 @@ export class Scraping {
             const browser = await puppeteer.launch({headless: true});
             const page = await browser.newPage();
             await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
-            await page.goto('http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode?p=33190139346861038800650170000786781171187163|2|1|2|882C55432C0CABE2FB291992E4EEF9F0B0A93050');
+            await page.goto(nfce);
             await page.waitFor(10000);
             
             const html = await page.content();
-            $ = cheerio.load(html);
+            const scrap = cheerio.load(html);
 
             const data = [];
             
-            $('#tabResult tbody tr').each(function(index, element){
+            scrap('#tabResult tbody tr').each(function(index, element){
                 
-                var name = $(this).find('.txtTit').not('.noWrap').text();
-                var codigo = $(this).find('.RCod').text();
-                var quantidade = $(this).find('.Rqtd').text();
-                var unidade = $(this).find('.RUN').text();
-                var valorUnidade = $(this).find('.RvlUnit').text();
-                var total = $(this).find('.valor').text();
+                var name = scrap(this).find('.txtTit').not('.noWrap').text();
+                var codigo = scrap(this).find('.RCod').text();
+                var quantidade = scrap(this).find('.Rqtd').text();
+                var unidade = scrap(this).find('.RUN').text();
+                var valorUnidade = scrap(this).find('.RvlUnit').text();
+                var total = scrap(this).find('.valor').text();
             
                 console.log(`nome:${name.trim()}`);
                 console.log(`codigo: ${codigo.trim()}`);

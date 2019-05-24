@@ -23,7 +23,11 @@ exports.cupomResolvers = {
     Mutation: {
         createCupom: (parent, { nfce }, { db }, info) => {
             const scraping = new scrap_service_1.Scraping();
-            scraping.scrapCupom(nfce);
+            scraping.scrapCupom(nfce)
+                .then((d) => {
+                console.log(d);
+            }).catch((r) => console.log(r));
+            console.log("Fim ====================");
         }
     }
 };

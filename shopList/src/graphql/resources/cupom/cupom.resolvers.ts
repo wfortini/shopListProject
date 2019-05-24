@@ -30,7 +30,12 @@ export const cupomResolvers = {
              createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
                   
                 const scraping = new Scraping();
-                scraping.scrapCupom(nfce);
+                scraping.scrapCupom(nfce)
+                     .then((d) => {
+                        console.log(d);
+                     }).catch((r) => console.log(r));
+
+                     console.log("Fim ====================");
              }
 
        }

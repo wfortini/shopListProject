@@ -1,10 +1,19 @@
 import { makeExecutableSchema } from 'graphql-tools';
+import { merge } from 'lodash';
 import { Query } from './query';
 import { Mutation } from './mutation';
 import { userTypes } from './resources/user/user.schema';
 import { cupomTypes } from './resources/cupom/cupom.schema';
 import { itemCupomTypes } from './resources/itemCupom/itemCupom.schema';
 import { historicoTypes } from './resources/historico/historico.schema';
+import { userResolvers } from './resources/user/user.resolvers';
+import { cupomResolvers } from './resources/cupom/cupom.resolvers';
+
+const resolvers = merge(
+     userResolvers,
+     cupomResolvers,
+
+);
 
 const SchemaDefinition = `
 
@@ -24,5 +33,5 @@ export default makeExecutableSchema({
         itemCupomTypes,
         historicoTypes
     ],
-    
+    resolvers
 });

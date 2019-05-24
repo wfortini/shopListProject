@@ -17,7 +17,7 @@ const historicoTypes = `
 
         id: ID!        
         description: String
-        user: User!
+        user: String!
         dataIncial: String
         dataFinal: String
         numHistorico: Int        
