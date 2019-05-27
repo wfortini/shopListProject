@@ -16,6 +16,7 @@
     "@types/lodash": "^4.14.132",
     "@types/node": "^11.13.7",
     "@types/sequelize": "4.0.76",
+    "@types/uuid": "^3.4.4",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",
     "gulp-typescript": "3.2.2",
@@ -32,6 +33,7 @@
     "lodash": "^4.17.11",
     "pg": "^7.10.0",
     "puppeteer": "^1.16.0",
-    "sequelize": "4.13.10"
+    "sequelize": "4.13.10",
+    "uuid": "^3.3.2"
   }
 }

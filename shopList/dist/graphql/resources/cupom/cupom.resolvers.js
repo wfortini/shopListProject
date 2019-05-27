@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const scrap_service_1 = require("../../../services/scrap-service");
+const uuidv1 = require("uuid/v1");
 exports.cupomResolvers = {
     Query: {
         cupons: (parent, { id }, { db }, info) => {
@@ -24,10 +25,15 @@ exports.cupomResolvers = {
         createCupom: (parent, { nfce }, { db }, info) => {
             const scraping = new scrap_service_1.Scraping();
             scraping.scrapCupom(nfce)
-                .then((d) => {
-                console.log(d);
+                .then((cupom) => {
+                cupom.id = uuidv1();
+                cupom.user = 'wellington';
+                db.sequelize.transaction((t) => {
+                    return db.Cupom.create(cupom, { transaction: t });
+                }).then((c) => {
+                    console.log(c);
+                });
             }).catch((r) => console.log(r));
-            console.log("Fim ====================");
         }
     }
 };

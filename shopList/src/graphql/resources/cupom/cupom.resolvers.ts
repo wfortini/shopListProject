@@ -2,6 +2,9 @@ import { CupomInstance } from './../../../models/CupomModel';
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
 import { GraphQLResolveInfo } from "graphql";
 import { Scraping } from '../../../services/scrap-service';
+import { Cupom } from '../../../domain/cupom';
+import { Transaction } from 'sequelize';
+import  * as uuidv1  from 'uuid/v1';
 
 export const cupomResolvers = {
 
@@ -31,11 +34,18 @@ export const cupomResolvers = {
                   
                 const scraping = new Scraping();
                 scraping.scrapCupom(nfce)
-                     .then((d) => {
-                        console.log(d);
+                     .then((cupom: Cupom) => {
+                        cupom.id = uuidv1();
+                        cupom.user = 'wellington';
+                        db.sequelize.transaction((t: Transaction) => {
+                            return db.Cupom.create(cupom, {transaction: t});
+                        }).then((c) =>{
+                            console.log(c);
+                        });
+                        
                      }).catch((r) => console.log(r));
 
-                     console.log("Fim ====================");
+                     
              }
 
        }

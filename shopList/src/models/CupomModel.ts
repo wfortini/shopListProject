@@ -13,7 +13,9 @@ export interface CupomAttributes{
     cep?: string;
     cidade?: string;
     qtdeTotalItens?: number;
-    formaPG?: string;
+    desconto: number;
+    formaPG: string;
+    valorTotal: number;
     valorPG?: number;
     dataCompra?: Date;  
     user?: string;

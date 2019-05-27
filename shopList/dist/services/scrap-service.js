@@ -12,6 +12,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer = require("puppeteer");
 const cheerio = require("cheerio");
+const cupom_1 = require("../domain/cupom");
+const itemCupom_1 = require("../domain/itemCupom");
 class Scraping {
     constructor() {
     }
@@ -21,29 +23,58 @@ class Scraping {
             const page = yield browser.newPage();
             yield page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3419.0 Safari/537.36');
             yield page.goto(nfce);
-            yield page.waitFor(10000);
+            yield page.waitFor(5000);
             const html = yield page.content();
             const scrap = cheerio.load(html);
-            const data = [];
+            let cupom = new cupom_1.Cupom();
+            // extrair data da compra
+            const dataCompra = scrap('li').filter('.ui-li-static').text();
+            cupom.dataCompra = new Date();
+            cupom.formaPG = "Teste";
+            cupom.nfce = nfce;
+            cupom.razaoSocial = scrap('#u20').text().trim();
+            scrap('.txtCenter .text').each(function (index, element) {
+                if (index == 0) {
+                    cupom.CNPJ = scrap(this).text();
+                }
+                else if (index == 1) {
+                    // ajustar enderço
+                    cupom.endereco = scrap(this).text();
+                }
+            });
+            scrap('#totalNota #linhaTotal').each(function (index, element) {
+                if (index == 0) {
+                    cupom.qtdeTotalItens = scrap(this).find('.totalNumb').text().trim();
+                }
+                else if (index == 1) {
+                    cupom.valorTotal = scrap(this).find('.totalNumb').text().trim();
+                }
+                else if (index == 2) {
+                    cupom.desconto = scrap(this).find('.totalNumb').text().trim();
+                }
+                else if (index == 3) {
+                    cupom.valorPG = scrap(this).find('.totalNumb').text().trim();
+                }
+            });
             scrap('#tabResult tbody tr').each(function (index, element) {
-                var name = scrap(this).find('.txtTit').not('.noWrap').text();
-                var codigo = scrap(this).find('.RCod').text();
-                var quantidade = scrap(this).find('.Rqtd').text();
-                var unidade = scrap(this).find('.RUN').text();
-                var valorUnidade = scrap(this).find('.RvlUnit').text();
-                var total = scrap(this).find('.valor').text();
-                console.log(`nome:${name.trim()}`);
-                console.log(`codigo: ${codigo.trim()}`);
-                console.log(`quantidade: ${quantidade}`);
-                console.log(`unidade: ${unidade}`);
-                console.log(`valor unidade: ${valorUnidade}`);
-                console.log(`valor: ${total}`);
-                console.log(index);
+                var nome = scrap(this).find('.txtTit').not('.noWrap').text().trim();
+                var codigo = scrap(this).find('.RCod').text().trim();
+                var quantidade = scrap(this).find('.Rqtd').text().trim();
+                var unidade = scrap(this).find('.RUN').text().trim();
+                var valorUnidade = scrap(this).find('.RvlUnit').text().trim();
+                var total = scrap(this).find('.valor').text().trim();
+                var item = new itemCupom_1.ItemCupom();
+                item.descricao = nome;
+                item.qtde = quantidade;
+                item.codigo = codigo;
+                item.unidade = unidade;
+                item.valorTotal = total;
+                item.valorUnitario = valorUnidade;
+                cupom.itensCupom.push(item);
             });
             yield browser.close();
-            return data;
+            return cupom;
         });
     }
 }
 exports.Scraping = Scraping;
-//module.exports = Scraping
