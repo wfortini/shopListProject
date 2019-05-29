@@ -78,6 +78,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                 type: DataTypes.DECIMAL(10,2),
                 allowNull: false
             },
+            valorTotal:{
+                type: DataTypes.DECIMAL(10,2),
+                allowNull: false
+            },
             dataCompra:{
                 type: DataTypes.DATE,
                 allowNull: false
@@ -108,7 +112,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                 }
             })
         }
-
         Cupom.associate = (models: ModelInterface): void =>{
             Cupom.belongsTo(models.Historic, {
                 foreignKey:{
@@ -119,5 +122,5 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             })
         }
 
-          return Cupom;
+        return Cupom;
 }

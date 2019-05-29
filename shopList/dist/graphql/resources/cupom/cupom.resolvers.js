@@ -26,23 +26,20 @@ exports.cupomResolvers = {
             const scraping = new scrap_service_1.Scraping();
             return scraping.scrapCupom(nfce)
                 .then((cupom) => {
+                if (cupom.itensCupom == null || cupom.itensCupom.length == 0) {
+                    throw new Error(`Cupom not found!`);
+                }
                 cupom.id = uuidv1();
-                var valorPG = cupom.valorPG.toString().replace(',', '.');
-                var valor = cupom.valorTotal.toString().replace(',', '.');
-                cupom.valorTotal = parseFloat(valor);
-                cupom.valorPG = parseFloat(valorPG);
                 cupom.user = 'wellington';
                 return db.sequelize.transaction((t) => {
                     return db.Cupom.create(cupom, { transaction: t });
                 }).then((cupomWithId) => {
                     cupom.itensCupom.forEach(element => {
+                        element.id = uuidv1();
                         element.cupom = cupomWithId.id;
                     });
                     return db.sequelize.transaction((t) => {
-                        return db.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t })
-                            .then((itens) => {
-                            return itens;
-                        });
+                        return db.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t });
                     }).then((itens) => {
                         cupom.itensCupom = itens;
                         return cupom;

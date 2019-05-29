@@ -38,11 +38,11 @@ export const cupomResolvers = {
                 return  scraping.scrapCupom(nfce)
                         .then((cupom: Cupom) => {
 
-                            cupom.id = uuidv1(); 
-                            var valorPG = cupom.valorPG.toString().replace(',', '.');
-                            var valor = cupom.valorTotal.toString().replace(',', '.');
-                            cupom.valorTotal = parseFloat(valor);
-                            cupom.valorPG = parseFloat(valorPG);                          
+                             if(cupom.itensCupom == null || cupom.itensCupom.length == 0){
+                                throw new Error(`Cupom not found!`);
+                             }                         
+
+                            cupom.id = uuidv1();                                               
 
                             cupom.user = 'wellington';
 
@@ -51,14 +51,12 @@ export const cupomResolvers = {
                             }).then((cupomWithId : CupomInstance) => {
                                 
                                 cupom.itensCupom.forEach(element => {
+                                    element.id = uuidv1();
                                     element.cupom = cupomWithId.id;
                                 });
                                 
                                 return db.sequelize.transaction((t: Transaction) => {
-                                    return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t})
-                                           .then((itens: ItemCupomInstance[]) =>{
-                                            return itens;
-                                            } );
+                                    return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t});                                           
                                     }).then((itens: ItemCupom[]) =>{
                                         cupom.itensCupom = itens;
                                         return cupom;

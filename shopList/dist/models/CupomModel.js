@@ -47,6 +47,10 @@ exports.default = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
+        valorTotal: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false
+        },
         dataCompra: {
             type: DataTypes.DATE,
             allowNull: false
