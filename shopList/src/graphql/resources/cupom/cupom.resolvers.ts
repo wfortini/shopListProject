@@ -5,6 +5,8 @@ import { Scraping } from '../../../services/scrap-service';
 import { Cupom } from '../../../domain/cupom';
 import { Transaction } from 'sequelize';
 import  * as uuidv1  from 'uuid/v1';
+import { ItemCupom } from '../../../domain/itemCupom';
+import { ItemCupomInstance } from '../../../models/ItemCupomModel';
 
 export const cupomResolvers = {
 
@@ -33,17 +35,38 @@ export const cupomResolvers = {
              createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
                   
                 const scraping = new Scraping();
-                scraping.scrapCupom(nfce)
-                     .then((cupom: Cupom) => {
-                        cupom.id = uuidv1();
-                        cupom.user = 'wellington';
-                        db.sequelize.transaction((t: Transaction) => {
-                            return db.Cupom.create(cupom, {transaction: t});
-                        }).then((c) =>{
-                            console.log(c);
-                        });
-                        
-                     }).catch((r) => console.log(r));
+                return  scraping.scrapCupom(nfce)
+                        .then((cupom: Cupom) => {
+
+                            cupom.id = uuidv1(); 
+                            var valorPG = cupom.valorPG.toString().replace(',', '.');
+                            var valor = cupom.valorTotal.toString().replace(',', '.');
+                            cupom.valorTotal = parseFloat(valor);
+                            cupom.valorPG = parseFloat(valorPG);                          
+
+                            cupom.user = 'wellington';
+
+                            return db.sequelize.transaction((t: Transaction) => {
+                                return db.Cupom.create(cupom, {transaction: t});
+                            }).then((cupomWithId : CupomInstance) => {
+                                
+                                cupom.itensCupom.forEach(element => {
+                                    element.cupom = cupomWithId.id;
+                                });
+                                
+                                return db.sequelize.transaction((t: Transaction) => {
+                                    return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t})
+                                           .then((itens: ItemCupomInstance[]) =>{
+                                            return itens;
+                                            } );
+                                    }).then((itens: ItemCupom[]) =>{
+                                        cupom.itensCupom = itens;
+                                        return cupom;
+                                    } );                                
+                              
+                            });
+                            
+                        }).catch((r) => console.log(r));
 
                      
              }

@@ -24,14 +24,29 @@ exports.cupomResolvers = {
     Mutation: {
         createCupom: (parent, { nfce }, { db }, info) => {
             const scraping = new scrap_service_1.Scraping();
-            scraping.scrapCupom(nfce)
+            return scraping.scrapCupom(nfce)
                 .then((cupom) => {
                 cupom.id = uuidv1();
+                var valorPG = cupom.valorPG.toString().replace(',', '.');
+                var valor = cupom.valorTotal.toString().replace(',', '.');
+                cupom.valorTotal = parseFloat(valor);
+                cupom.valorPG = parseFloat(valorPG);
                 cupom.user = 'wellington';
-                db.sequelize.transaction((t) => {
+                return db.sequelize.transaction((t) => {
                     return db.Cupom.create(cupom, { transaction: t });
-                }).then((c) => {
-                    console.log(c);
+                }).then((cupomWithId) => {
+                    cupom.itensCupom.forEach(element => {
+                        element.cupom = cupomWithId.id;
+                    });
+                    return db.sequelize.transaction((t) => {
+                        return db.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t })
+                            .then((itens) => {
+                            return itens;
+                        });
+                    }).then((itens) => {
+                        cupom.itensCupom = itens;
+                        return cupom;
+                    });
                 });
             }).catch((r) => console.log(r));
         }
