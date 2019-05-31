@@ -7,6 +7,7 @@ import { Transaction } from 'sequelize';
 import  * as uuidv1  from 'uuid/v1';
 import { ItemCupom } from '../../../domain/itemCupom';
 import { ItemCupomInstance } from '../../../models/ItemCupomModel';
+import { HistoricInstance } from '../../../models/HistoricModel';
 
 export const cupomResolvers = {
 
@@ -35,6 +36,7 @@ export const cupomResolvers = {
              createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
                   
                 const scraping = new Scraping();
+
                 return  scraping.scrapCupom(nfce)
                         .then((cupom: Cupom) => {
 
@@ -42,27 +44,41 @@ export const cupomResolvers = {
                                 throw new Error(`Cupom not found!`);
                              }                         
 
-                            cupom.id = uuidv1();                                               
+                            cupom.id = uuidv1();
+                            var user = 'wellington';
+                            cupom.user = user;
 
-                            cupom.user = 'wellington';
+                           return db.Historic.find({
+                               where: {
+                                         user: user,
+                                         dataFinal: null
+                                       }
+                           }).then((historico: HistoricInstance) => {
 
-                            return db.sequelize.transaction((t: Transaction) => {
-                                return db.Cupom.create(cupom, {transaction: t});
-                            }).then((cupomWithId : CupomInstance) => {
+                                if(historico) throw new Error(`Historico with user ${user} not found!`);
+                                    
+                                 cupom.historico = historico.id;
+
+                                 return db.sequelize.transaction((t: Transaction) => {
+                                    return db.Cupom.create(cupom, {transaction: t});
+                                }).then((cupomWithId : CupomInstance) => {
+                                    
+                                        cupom.itensCupom.forEach(element => {
+                                            element.id = uuidv1();
+                                            element.cupom = cupomWithId.id;
+                                        });
+                                        
+                                        return db.sequelize.transaction((t: Transaction) => {
+                                            return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t});                                           
+                                            }).then((itens: ItemCupom[]) =>{
+                                                cupom.itensCupom = itens;
+                                                return cupom;
+
+                                            }); // fim promise created itensCupom                                
                                 
-                                cupom.itensCupom.forEach(element => {
-                                    element.id = uuidv1();
-                                    element.cupom = cupomWithId.id;
-                                });
-                                
-                                return db.sequelize.transaction((t: Transaction) => {
-                                    return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t});                                           
-                                    }).then((itens: ItemCupom[]) =>{
-                                        cupom.itensCupom = itens;
-                                        return cupom;
-                                    } );                                
-                              
-                            });
+                                }); // fim promise created cupom
+                                    
+                           }); // fim promise  obter historico                               
                             
                         }).catch((r) => console.log(r));
 

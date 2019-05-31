@@ -41,7 +41,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             },
             dataFinal:{
                 type: DataTypes.DATE,
-                allowNull: false
+                allowNull: true
             },
             numHistorico:{
                 type: DataTypes.INTEGER,
