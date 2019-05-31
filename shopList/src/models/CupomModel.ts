@@ -47,11 +47,11 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                 allowNull: false,                
             },
             endereco:{
-                type: DataTypes.STRING(300),
+                type: DataTypes.STRING(1000),
                 allowNull: true
             },
             bairro:{
-                type: DataTypes.STRING(500),
+                type: DataTypes.STRING(100),
                 allowNull: true
             },
             estado:{
