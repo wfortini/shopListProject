@@ -1,0 +1,3 @@
+rootProject.name = 'shopListMobile'
+
+include ':app'
