@@ -10,7 +10,8 @@ const itemCupom_schema_1 = require("./resources/itemCupom/itemCupom.schema");
 const historico_schema_1 = require("./resources/historico/historico.schema");
 const user_resolvers_1 = require("./resources/user/user.resolvers");
 const cupom_resolvers_1 = require("./resources/cupom/cupom.resolvers");
-const resolvers = lodash_1.merge(user_resolvers_1.userResolvers, cupom_resolvers_1.cupomResolvers);
+const historico_resolvers_1 = require("./resources/historico/historico.resolvers");
+const resolvers = lodash_1.merge(user_resolvers_1.userResolvers, cupom_resolvers_1.cupomResolvers, historico_resolvers_1.historicoResolvers);
 const SchemaDefinition = `
 
     type Schema {

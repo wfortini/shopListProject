@@ -16,11 +16,11 @@ exports.default = (sequelize, DataTypes) => {
             allowNull: false,
         },
         endereco: {
-            type: DataTypes.STRING(300),
+            type: DataTypes.STRING(1000),
             allowNull: true
         },
         bairro: {
-            type: DataTypes.STRING(500),
+            type: DataTypes.STRING(100),
             allowNull: true
         },
         estado: {
@@ -64,8 +64,8 @@ exports.default = (sequelize, DataTypes) => {
             allowNull: false
         },
         historico: {
-            type: DataTypes.STRING,
-            allowNull: true
+            type: DataTypes.BIGINT,
+            allowNull: false
         }
     }, {
         tableName: 'cupons'
@@ -80,9 +80,9 @@ exports.default = (sequelize, DataTypes) => {
         });
     };
     Cupom.associate = (models) => {
-        Cupom.belongsTo(models.Historic, {
+        Cupom.belongsTo(models.Historico, {
             foreignKey: {
-                allowNull: true,
+                allowNull: false,
                 field: 'historico',
                 name: 'historico'
             }

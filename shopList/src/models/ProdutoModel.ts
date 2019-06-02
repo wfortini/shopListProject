@@ -1,50 +1,86 @@
 import { BaseModelInterface } from './../interfaces/BaseModelInterface';
 import * as Sequelize  from 'sequelize';
-import { ModelInterface } from '../interfaces/ModelInterface';
 
 export interface ProdutoAttributes{
 
-    id?: string;
-    razaoSocial?: string;
-    CNPJ?: string;
-    endereco?: string;
-    bairro?: string;
-    estado?: string;
-    cep?: string;
-    cidade?: string;
-    qtdeTotalItens?: number;
-    desconto: number;
-    formaPG: string;
-    valorTotal: number;
-    valorPG?: number;
-    dataCompra?: Date;  
-    user?: string;
-    historico: string;
-    nfce?: string; 
+    id?: number;
+    ean: string;
+    desc_1: string;
+    desc_2: string;
+    desc_3: string;
+    valor: number;
+    image: string;
+    dataUpdate: string;
+    ultimoValor: number;
+    
+    nomeFantasia: string;
+    razaoSocial: string;
+    CNPJ: string;
+    endereco: string;
+    bairro: string;
+    estado: string;
+    cep: string;
+    cidade: string;
     createdAt?: string;
     updated?: string;
 
 }
-export interface CupomInstance extends Sequelize.Instance<CupomAttributes>, CupomAttributes {}
+export interface ProdutoInstance extends Sequelize.Instance<ProdutoAttributes>, ProdutoAttributes {}
 
-export interface CupomModel extends BaseModelInterface, Sequelize.Model<CupomInstance, CupomAttributes>{}
+export interface ProdutoModel extends BaseModelInterface, Sequelize.Model<ProdutoModel, ProdutoAttributes>{}
 
-export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) : CupomModel => {
+export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) : ProdutoModel => {
 
-    const Cupom: CupomModel = 
-          sequelize.define('Cupom', {
+    const Produto: ProdutoModel = 
+          sequelize.define('Produto', {
                id:{
-                  type: DataTypes.STRING,
+                  type: DataTypes.BIGINT,
                   allowNull: false,
                   primaryKey: true
                },
+               ean:{
+                   type: DataTypes.STRING,
+                   allowNull: true
+               },
+               desc_1:{
+                   type: DataTypes.STRING(150),
+                   allowNull: true
+               },
+               desc_2:{
+                type: DataTypes.STRING(150),
+                allowNull: true
+               },
+               desc_3:{
+                type: DataTypes.STRING(150),
+                allowNull: true
+               },
+               image:{
+                   type: DataTypes.STRING,
+                   allowNull: true
+               },
+               dataUpdate:{
+                   type: DataTypes.STRING,
+                   allowNull: true
+               },
+               ultimoValor:{
+                   type:DataTypes.DECIMAL(10,2),
+                   allowNull: true
+               },
+               valor:{
+                   type: DataTypes.DECIMAL(10,2),
+                   allowNull: false
+               },
+               nomeFantasia:{
+                   type: DataTypes.STRING(150),
+                   allowNull: true
+               },
                razaoSocial:{
                    type: DataTypes.STRING(128),
-                   allowNull: false
+                   allowNull: true
                },
                CNPJ:{
                 type: DataTypes.STRING,
-                allowNull: false,                
+                allowNull: true,                
             },
             endereco:{
                 type: DataTypes.STRING(300),
@@ -65,62 +101,12 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             cidade:{
                 type: DataTypes.STRING(50),
                 allowNull: true
-            },
-            qtdeTotalItens:{
-                type: DataTypes.INTEGER,
-                allowNull: false
-            },
-            formaPG:{
-                type: DataTypes.STRING(50),
-                allowNull: false
-            },
-            valorPG:{
-                type: DataTypes.DECIMAL(10,2),
-                allowNull: false
-            },
-            valorTotal:{
-                type: DataTypes.DECIMAL(10,2),
-                allowNull: false
-            },
-            dataCompra:{
-                type: DataTypes.DATE,
-                allowNull: false
-            },
-            nfce:{
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            user:{
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            historico:{
-                type: DataTypes.STRING,
-                allowNull: true
-            }
+            }           
 
           }, {
-              tableName: 'cupons'
+              tableName: 'produtos'
           });
 
-          Cupom.associate = (models: ModelInterface): void =>{
-            Cupom.belongsTo(models.User, {
-                foreignKey:{
-                    allowNull: false,
-                    field: 'user',
-                    name: 'user'
-                }
-            })
-        }
-        Cupom.associate = (models: ModelInterface): void =>{
-            Cupom.belongsTo(models.Historic, {
-                foreignKey:{
-                    allowNull: true,
-                    field: 'historico',
-                    name: 'historico'
-                }
-            })
-        }
-
-        return Cupom;
+         
+        return Produto;
 }

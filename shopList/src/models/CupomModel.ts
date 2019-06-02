@@ -19,7 +19,7 @@ export interface CupomAttributes{
     valorPG?: number;
     dataCompra?: Date;  
     user?: string;
-    historico: string;
+    historico: number;
     nfce?: string; 
     createdAt?: string;
     updated?: string;
@@ -95,8 +95,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                 allowNull: false
             },
             historico:{
-                type: DataTypes.STRING,
-                allowNull: true
+                type: DataTypes.BIGINT,
+                allowNull: false
             }
 
           }, {
@@ -113,9 +113,9 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             })
         }
         Cupom.associate = (models: ModelInterface): void =>{
-            Cupom.belongsTo(models.Historic, {
+            Cupom.belongsTo(models.Historico, {
                 foreignKey:{
-                    allowNull: true,
+                    allowNull: false,
                     field: 'historico',
                     name: 'historico'
                 }

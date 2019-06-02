@@ -17,7 +17,7 @@ export class Cupom {
     valorTotal: number;
     dataCompra: Date;  
     user: string;
-    historico: string;
+    historico: number;
     nfce: string; 
     createdAt: string;
     updated: string;

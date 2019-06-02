@@ -8,10 +8,12 @@ import { itemCupomTypes } from './resources/itemCupom/itemCupom.schema';
 import { historicoTypes } from './resources/historico/historico.schema';
 import { userResolvers } from './resources/user/user.resolvers';
 import { cupomResolvers } from './resources/cupom/cupom.resolvers';
+import { historicoResolvers } from './resources/historico/historico.resolvers';
 
 const resolvers = merge(
      userResolvers,
      cupomResolvers,
+     historicoResolvers
 
 );
 

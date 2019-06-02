@@ -3,38 +3,33 @@ const historicoTypes = `
       type Historico {
 
         id: ID!        
-        description: String
-        user: User!
+        descricao: String
+        user: User
         dataIncial: String
         dataFinal: String
         numHistorico: Int
+        categoria: Int
         createdAt: String
         updatedAt: String
        
       }
 
-      input historicoCreateInput {
-
-        id: ID!        
-        description: String
-        user: String!
-        dataIncial: String
-        dataFinal: String
-        numHistorico: Int        
+      input historicoCreateInput {        
+        descricao: String
+        categoria: Int 
+        user: String
+        dataIncial: String             
 
       }
 
 `;
 
-const historicoQuery = `
-    
-      historico (user: String) : [ Historico ]
-    
+const historicoQuery = `    
+      historico (user: String) : [ Historico ]    
 
 `;
 
-const historicoMutation = `
-    
+const historicoMutation = `    
      createHistorico(input: historicoCreateInput) : Historico
 
 `;

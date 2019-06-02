@@ -30,21 +30,33 @@ exports.cupomResolvers = {
                     throw new Error(`Cupom not found!`);
                 }
                 cupom.id = uuidv1();
-                cupom.user = 'wellington';
-                return db.sequelize.transaction((t) => {
-                    return db.Cupom.create(cupom, { transaction: t });
-                }).then((cupomWithId) => {
-                    cupom.itensCupom.forEach(element => {
-                        element.id = uuidv1();
-                        element.cupom = cupomWithId.id;
-                    });
+                var user = 'wellington';
+                cupom.user = user;
+                return db.Historico.find({
+                    where: {
+                        user: user,
+                        dataFinal: null
+                    }
+                }).then((historico) => {
+                    console.log(`===============${historico}`);
+                    if (!historico)
+                        throw new Error(`Historico with user ${user} not found!`);
+                    cupom.historico = historico.id;
                     return db.sequelize.transaction((t) => {
-                        return db.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t });
-                    }).then((itens) => {
-                        cupom.itensCupom = itens;
-                        return cupom;
-                    });
-                });
+                        return db.Cupom.create(cupom, { transaction: t });
+                    }).then((cupomWithId) => {
+                        cupom.itensCupom.forEach(element => {
+                            element.id = uuidv1();
+                            element.cupom = cupomWithId.id;
+                        });
+                        return db.sequelize.transaction((t) => {
+                            return db.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t });
+                        }).then((itens) => {
+                            cupom.itensCupom = itens;
+                            return cupom;
+                        }); // fim promise created itensCupom                                
+                    }); // fim promise created cupom
+                }); // fim promise  obter historico                               
             }).catch((r) => console.log(r));
         }
     }

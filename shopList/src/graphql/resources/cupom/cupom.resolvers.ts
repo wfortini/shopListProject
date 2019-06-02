@@ -6,8 +6,7 @@ import { Cupom } from '../../../domain/cupom';
 import { Transaction } from 'sequelize';
 import  * as uuidv1  from 'uuid/v1';
 import { ItemCupom } from '../../../domain/itemCupom';
-import { ItemCupomInstance } from '../../../models/ItemCupomModel';
-import { HistoricInstance } from '../../../models/HistoricModel';
+import { HistoricoInstance } from '../../../models/HistoricoModel';
 
 export const cupomResolvers = {
 
@@ -32,11 +31,9 @@ export const cupomResolvers = {
        },
 
        Mutation: {
-
              createCupom: (parent, {nfce}, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
                   
                 const scraping = new Scraping();
-
                 return  scraping.scrapCupom(nfce)
                         .then((cupom: Cupom) => {
 
@@ -48,17 +45,17 @@ export const cupomResolvers = {
                             var user = 'wellington';
                             cupom.user = user;
 
-                           return db.Historic.find({
+                           return db.Historico.find({
                                where: {
                                          user: user,
                                          dataFinal: null
                                        }
-                           }).then((historico: HistoricInstance) => {
-
-                                if(historico) throw new Error(`Historico with user ${user} not found!`);
+                           }).then((historico: HistoricoInstance) => {
+                               console.log(`===============${historico}`);
+                                if(!historico) throw new Error(`Historico with user ${user} not found!`);
                                     
                                  cupom.historico = historico.id;
-
+                                 
                                  return db.sequelize.transaction((t: Transaction) => {
                                     return db.Cupom.create(cupom, {transaction: t});
                                 }).then((cupomWithId : CupomInstance) => {

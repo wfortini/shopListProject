@@ -59,7 +59,7 @@ class Scraping {
             });
             scrap('#tabResult tbody tr').each(function (index, element) {
                 var nome = scrap(this).find('.txtTit').not('.noWrap').text().trim();
-                var codigo = scrap(this).find('.RCod').text().trim();
+                var codigo = scrap(this).find('.RCod').text().trim().substring(8);
                 var quantidade = scrap(this).find('.Rqtd').text().trim().substr(6);
                 var unidade = scrap(this).find('.RUN').text().trim().substr(3);
                 var valorUnidade = scrap(this).find('.RvlUnit').text().trim().substr(10);
@@ -67,7 +67,7 @@ class Scraping {
                 var item = new itemCupom_1.ItemCupom();
                 item.descricao = nome;
                 item.qtde = quantidade;
-                item.codigo = codigo;
+                item.codigo = codigo.trim().substr(0, codigo.length - 1);
                 item.unidade = unidade.trim();
                 item.valorTotal = total.trim().replace(',', '.');
                 item.valorUnitario = valorUnidade.trim().replace(',', '.');
