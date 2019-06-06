@@ -5,6 +5,7 @@ import * as puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { Cupom } from '../domain/cupom';
 import { ItemCupom } from "../domain/itemCupom";
+import * as moment from 'moment';
 
 export class Scraping {
 
@@ -21,18 +22,30 @@ export class Scraping {
             await page.waitFor(7000);
             
             const html = await page.content();
-            console.log(`=============\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${html}`);
+            //console.log(`=============\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${html}`);
             const scrap = cheerio.load(html);
 
             let cupom = new Cupom();
 
             // extrair data da compra
-            const dataCompra = scrap('li').filter('.ui-li-static').text();
-            cupom.dataCompra = new Date();
+            const textData = scrap('li').filter('.ui-li-static').text();
+            const dtIndex = textData.indexOf('Emissão:');
+            const dataEmissao = textData.substr(dtIndex + 9, 19);
+
+            const dia = dataEmissao.substr(0, 2);
+            const mes = dataEmissao.substr(3, 2);
+            const ano = dataEmissao.substr(6, 5);
+            const hora = dataEmissao.substr(11);
+
+            
+            console.log("=====" + dia + " " +  mes + " " + ano + " " + hora) ;
+            cupom.dataCompra = new Date(`${mes}-${dia}-${ano} ${hora}`);
             cupom.formaPG = "Teste"; //TODO: ajstar formas de pagamento
 
             cupom.nfce = nfce;            
             cupom.razaoSocial = scrap('#u20').text().trim();
+
+           
             
             scrap('.txtCenter .text').each(function(index, element){
 
@@ -42,21 +55,7 @@ export class Scraping {
                     // ajustar enderço
                     cupom.endereco = scrap(this).text();
                 }         
-          });
-
-          scrap('#totalNota #linhaTotal').each(function(index, element){
-      
-                if(index == 0){
-                    cupom.qtdeTotalItens = scrap(this).find('.totalNumb').text().trim();
-                }else if(index == 1){
-                    cupom.valorTotal = scrap(this).find('.totalNumb').text().trim().replace(',', '.'); 
-                }else if(index == 2){
-                    cupom.desconto = scrap(this).find('.totalNumb').text().trim();
-                }else if(index == 3){
-                    cupom.valorPG = scrap(this).find('.totalNumb').text().trim().replace(',', '.');
-                }
-          });
-        
+          });       
             
         scrap('#tabResult tbody tr').each(function(index, element){
             
@@ -79,6 +78,19 @@ export class Scraping {
             cupom.itensCupom.push(item);
             
         });
+
+        scrap('#totalNota #linhaTotal').each(function(index, element){
+      
+            if(index == 0){
+                cupom.qtdeTotalItens = scrap(this).find('.totalNumb').text().trim();
+            }else if(index == 1){
+                cupom.valorTotal = scrap(this).find('.totalNumb').text().trim().replace(',', '.'); 
+            }else if(index == 2){
+                cupom.desconto = scrap(this).find('.totalNumb').text().trim();
+            }else if(index == 3){
+                cupom.valorPG = scrap(this).find('.totalNumb').text().trim().replace(',', '.');
+            }
+      });
 
         await browser.close();        
         return cupom;

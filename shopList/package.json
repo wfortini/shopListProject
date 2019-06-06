@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development node_modules/.bin/nodemon --delay 5 dist/index",
+    "dev": "node_modules/.bin/nodemon --delay 5 dist/index",
     "gulp": "node_modules/.bin/gulp"
   },
   "keywords": [],
@@ -27,10 +27,12 @@
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.16.4",
     "express-graphql": "^0.8.0",
+    "fuse.js": "^3.4.5",
     "graphql": "^14.2.1",
     "graphql-fields": "^2.0.3",
     "graphql-tools": "^4.0.4",
     "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "pg": "^7.10.0",
     "puppeteer": "^1.16.0",
     "sequelize": "4.13.10",

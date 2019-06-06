@@ -38,7 +38,6 @@ exports.cupomResolvers = {
                         dataFinal: null
                     }
                 }).then((historico) => {
-                    console.log(`===============${historico}`);
                     if (!historico)
                         throw new Error(`Historico with user ${user} not found!`);
                     cupom.historico = historico.id;

@@ -50,8 +50,7 @@ export const cupomResolvers = {
                                          user: user,
                                          dataFinal: null
                                        }
-                           }).then((historico: HistoricoInstance) => {
-                               console.log(`===============${historico}`);
+                           }).then((historico: HistoricoInstance) => {                               
                                 if(!historico) throw new Error(`Historico with user ${user} not found!`);
                                     
                                  cupom.historico = historico.id;
