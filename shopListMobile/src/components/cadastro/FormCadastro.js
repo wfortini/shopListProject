@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {  StyleSheet,  Text,  View, TouchableOpacity } from 'react-native';
-
 import { SocialIcon, Divider} from 'react-native-elements';
-
 import { Actions } from 'react-native-router-flux';
-
 
 export default class FormCadastro extends Component {   
 
@@ -12,7 +9,7 @@ export default class FormCadastro extends Component {
           console.log(this.props);
             return (
 
-              <View style={styles.container}>          
+              <View style={styles.container}>  
 
                   
                   <View style={styles.elementsContainer}>  
@@ -56,7 +53,7 @@ const styles = StyleSheet.create({
   }, 
   text: {
     paddingTop: 80,
-    coltextor: 'black',
+    color: 'black',
     fontWeight: 'bold',   
     marginTop: 20,
     fontSize: 30,

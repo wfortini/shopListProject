@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 
-import {  StyleSheet,  Text,  View, TextInput, Button  } from 'react-native';
+import {  StyleSheet,  Text,  View, TextInput  } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-
+import { AppStyles } from '../../styles/AppStyles';
 import { connect } from 'react-redux';
+import { Button } from 'react-native-elements';
 
 import {modificaEmail, 
         modificaNome, 
@@ -38,71 +39,58 @@ const FormEmail = props => {
     return (
 
       <View style={styles.container}>
-
-             <View style={{ flex: 3, alignItems: 'center' }}>
-                    <Text style={styles.text}>Vitriny</Text>
-             </View>
-
-             <View  style={styles.inputWrapper} >
-                    
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Email"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.email}
-                      underlineColorAndroid="transparent"
-                      onChangeText={texto => props.modificaEmail(texto) }
-                    />
-                </View>
-
-                <View  style={styles.inputWrapper} >
-                    
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Nome completo"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.nome}
-                      underlineColorAndroid="transparent"
-                      onChangeText={texto => props.modificaNome(texto) }
-                    />
-                </View>
-
-                <View  style={styles.inputWrapper} >
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Nome do usuário"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.nomeUsuario}
-                      underlineColorAndroid="transparent"
-                      onChangeText={texto => props.modificaNomeUsuario(texto) }
-                    />
-                </View>
-
-                <View  style={styles.inputWrapper} >                    
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Senha"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.senha}                     
-                      underlineColorAndroid="transparent"
-                      onChangeText={texto => props.modificaSenha(texto) }
-                    />
-                </View>
-                <View>
-                  <Button                          
-                          title="OK"
-                          borderRadius={0}                  
-                          onPress={this.onSubmit}/>
-                </View>
+      <Text style={[styles.title, styles.leftTitle]}>Create new account</Text>
+      <View style={styles.InputContainer}>
+        <TextInput
+          style={styles.body}
+          placeholder="E-mail"
+          onChangeText={texto => props.modificaEmail(texto) }
+          value={props.Email}
+          placeholderTextColor={AppStyles.color.grey}
+          underlineColorAndroid="transparent"
+        />
       </View>
+      <View style={styles.InputContainer}>
+        <TextInput
+          style={styles.body}
+          placeholder="Nome completo"
+          oonChangeText={texto => props.modificaNome(texto) }
+          value={props.nomeUsuario}
+          placeholderTextColor={AppStyles.color.grey}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <View style={styles.InputContainer}>
+        <TextInput
+          style={styles.body}
+          placeholder="Senha"
+          onChangeText={texto => props.modificaSenha(texto) }
+          value={props.senha}
+          placeholderTextColor={AppStyles.color.grey}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <View style={styles.InputContainer}>
+        <TextInput
+          style={styles.body}
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={texto => props.modificaSenha(texto) }
+          value={props.senha}
+          placeholderTextColor={AppStyles.color.grey}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      <Button
+        containerStyle={[styles.facebookContainer, { marginTop: 50 }]}
+        style={styles.facebookText}
+        onPress={this.onSubmit}
+      >
+        Sign Up
+      </Button>
+    </View>
+
+     
           
     );
 
@@ -125,30 +113,85 @@ export default connect(mapStateToProps,
     register })(FormEmail);
 
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({ 
   container: {
-    flex: 1,   
-    alignItems: 'center',
+    flex: 1,
+    alignItems: "center"
   },
+  title: {
+    fontSize: AppStyles.fontSize.title,
+    fontWeight: "bold",
+    color: AppStyles.color.tint,
+    marginTop: 20,
+    marginBottom: 20
+  },
+  leftTitle: {
+    alignSelf: "stretch",
+    textAlign: "left",
+    marginLeft: 20
+  },
+  content: {
+    paddingLeft: 50,
+    paddingRight: 50,
+    textAlign: "center",
+    fontSize: AppStyles.fontSize.content,
+    color: AppStyles.color.text
+  },
+  loginContainer: {
+    width: AppStyles.buttonWidth.main,
+    backgroundColor: AppStyles.color.tint,
+    borderRadius: AppStyles.borderRadius.main,
+    padding: 10,
+    marginTop: 30
+  },
+  loginText: {
+    color: AppStyles.color.white
+  },
+  placeholder: {
+    fontFamily: AppStyles.fontName.text,
+    color: "red"
+  },
+  InputContainer: {
+    width: AppStyles.textInputWidth.main,
+    marginTop: 30,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: AppStyles.color.grey,
+    borderRadius: AppStyles.borderRadius.main
+  },
+  body: {
+    height: 42,
+    paddingLeft: 20,
+    paddingRight: 20,
+    color: AppStyles.color.text
+  },
+  facebookContainer: {
+    width: AppStyles.buttonWidth.main,
+    backgroundColor: AppStyles.color.tint,
+    borderRadius: AppStyles.borderRadius.main,
+    padding: 10,
+    marginTop: 30
+  },
+  facebookText: {
+    color: AppStyles.color.white
+  },  
   containerTitle: {
     flex: 3,
     alignItems: 'center',
     justifyContent: 'center',
   }, 
   text: {
-    paddingTop: 80,    
+    paddingTop: 40,    
     fontWeight: 'bold',   
     marginTop: 20,
     fontSize: 30,
     fontFamily: "Roboto",
   },
   input: {    
-    width: DEVICE_WIDTH - 40,
+    width: DEVICE_WIDTH - 10,
     height: 40,
     marginHorizontal: 20,
-    paddingLeft: 45,
-    borderRadius: 20,
-    
+    paddingLeft: 20,    
     fontSize: 16,
 
   },
