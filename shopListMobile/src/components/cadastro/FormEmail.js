@@ -39,7 +39,7 @@ const FormEmail = props => {
     return (
 
       <View style={styles.container}>
-      <Text style={[styles.title, styles.leftTitle]}>Create new account</Text>
+      <Text style={[styles.title, styles.leftTitle]}>Criar nova conta</Text>
       <View style={styles.InputContainer}>
         <TextInput
           style={styles.body}
@@ -83,11 +83,8 @@ const FormEmail = props => {
       </View>
       <Button
         containerStyle={[styles.facebookContainer, { marginTop: 50 }]}
-        style={styles.facebookText}
-        onPress={this.onSubmit}
-      >
-        Sign Up
-      </Button>
+        style={styles.facebookText} title="Cadastrar"
+        onPress={this.onSubmit} ></Button>
     </View>
 
      
@@ -160,17 +157,18 @@ const styles = StyleSheet.create({
     borderRadius: AppStyles.borderRadius.main
   },
   body: {
-    height: 42,
+    height: 50,
     paddingLeft: 20,
     paddingRight: 20,
     color: AppStyles.color.text
   },
   facebookContainer: {
     width: AppStyles.buttonWidth.main,
-    backgroundColor: AppStyles.color.tint,
-    borderRadius: AppStyles.borderRadius.main,
+    height: 60,
     padding: 10,
-    marginTop: 30
+    marginTop: 30,
+    borderRadius: AppStyles.borderRadius.main
+
   },
   facebookText: {
     color: AppStyles.color.white
