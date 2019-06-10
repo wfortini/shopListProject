@@ -1,17 +1,21 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+const FBSDK = require("react-native-fbsdk");
+const { LoginManager, AccessToken } = FBSDK;
+
 import Dimensions from 'Dimensions';
 
 import {  StyleSheet,  TouchableOpacity,  Text,  Animated,  Easing,  Image,  Alert,  View,
   ImageBackground, KeyboardAvoidingView, TextInput,  } from 'react-native';
 
 import { connect } from 'react-redux';
-import { modificaEmail, modificaSenha } from '../../actions/AutenticacaoActions';
+import { modificaEmail, modificaSenha, signInWithFacebook } from '../../actions/AutenticacaoActions';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
+import { SocialIcon, Divider} from 'react-native-elements';
 
 import usernameImg from '../../images/username.png';
 import passwordImg from '../../images/password.png';
@@ -35,6 +39,25 @@ const Login = props => {
       inputRange: [0, 1],
       outputRange: [1, MARGIN],
     });
+
+    onSubmit = () => {
+      LoginManager.logInWithReadPermissions(["public_profile", "email"])
+      .then(result => {             
+           if(result.isCancelled){
+             alert("Cancelado");
+           }else{
+                AccessToken.getCurrentAccessToken().then((data) => {                  
+                  props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
+
+                    if(exists) alert("sucesso");
+                  });
+                }).catch((error) => console.log(error.message))
+           }
+
+
+      })
+
+    }
 
     return (
 
@@ -98,7 +121,11 @@ const Login = props => {
                             style={[styles.circle, {transform: [{scale: changeScale}]}]}
                           />
                     </Animated.View>
-                 </View>           
+                 </View> 
+                 <TouchableOpacity onPress={this.onSubmit }>
+                      <SocialIcon title='Entrar com Facebook!!!!!' button type='facebook'/> 
+                 </TouchableOpacity >
+                          
        </ImageBackground>
     );
 
@@ -111,7 +138,9 @@ const mapStateToProps = state => (
     }
 )
 
-export default connect(mapStateToProps, { modificaEmail, modificaSenha })(Login);
+export default connect(mapStateToProps, { modificaEmail,
+                       modificaSenha,
+                       signInWithFacebook })(Login);
 
 
 const styles = StyleSheet.create({
