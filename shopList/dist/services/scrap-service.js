@@ -36,7 +36,6 @@ class Scraping {
             const mes = dataEmissao.substr(3, 2);
             const ano = dataEmissao.substr(6, 5);
             const hora = dataEmissao.substr(11);
-            console.log("=====" + dia + " " + mes + " " + ano + " " + hora);
             cupom.dataCompra = new Date(`${mes}-${dia}-${ano} ${hora}`);
             cupom.formaPG = "Teste"; //TODO: ajstar formas de pagamento
             cupom.nfce = nfce;
