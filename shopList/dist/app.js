@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const graphqlHTTP = require("express-graphql");
-const schema_1 = require("./graphql/schema");
-const models_1 = require("./models");
+const compression = require("compression");
+const cors = require("cors");
+const userRoutes_1 = require("./routes/userRoutes");
 class App {
     constructor() {
         this.express = express();
-        this.middleware();
+        this.config();
+        this.routes();
     }
-    middleware() {
-        this.express.use('/graphql', (req, res, next) => {
-            req['context'] = {};
-            req['context']['db'] = models_1.default;
-            next(); // chama proximo mippleware
-        }, graphqlHTTP((req) => ({
-            schema: schema_1.default,
-            graphiql: true,
-            context: req['context'],
-        })));
+    routes() {
+        this.express.use("/api/user", new userRoutes_1.UserRouters().router);
+    }
+    config() {
+        this.express.set("port", process.env.PORT || 3000);
+        this.express.use(express.json());
+        this.express.use(express.urlencoded({ extended: false }));
+        this.express.use(compression());
+        this.express.use(cors());
     }
 }
 exports.default = new App().express;
