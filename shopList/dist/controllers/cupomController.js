@@ -39,7 +39,7 @@ class CupomController {
                             element.cupom = cupomWithId.id;
                         });
                         return models_1.default.sequelize.transaction((t) => {
-                            return models_1.default.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t });
+                            return models_1.default.ItemCupom.bulkCreate(cupom.itensCupom, { transaction: t, returning: true });
                         }).then((itens) => {
                             cupom.itensCupom = itens;
                             return cupom;
@@ -50,7 +50,7 @@ class CupomController {
                 res.status(400).send(error);
                 console.log(`======= ${error}`);
             });
-            res.status(200).send({ result });
+            res.status(200).send(result);
         });
     }
 }

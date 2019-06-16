@@ -6,6 +6,7 @@ import { Cupom } from "../domain/cupom";
 import { HistoricoInstance } from "../models/HistoricoModel";
 import { CupomInstance } from "../models/CupomModel";
 import { ItemCupom } from "../domain/itemCupom";
+import { ItemCupomInstance } from "../models/ItemCupomModel";
 
 export class CupomController {
 
@@ -16,7 +17,7 @@ export class CupomController {
 
         const scraping = new Scraping();        
         const result = await  scraping.scrapCupom(nfce.value)
-                            .then((cupom: Cupom) => {
+                            .then((cupom: any) => {
 
                                 if(cupom.itensCupom == null || cupom.itensCupom.length == 0){
                                     throw new Error(`Cupom not found!`);
@@ -44,8 +45,8 @@ export class CupomController {
                                             });
                                             
                                             return db.sequelize.transaction((t: Transaction) => {
-                                                return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t});                                           
-                                                }).then((itens: ItemCupom[]) =>{
+                                                return db.ItemCupom.bulkCreate(cupom.itensCupom, {transaction: t, returning: true});                                           
+                                                }).then((itens: ItemCupomInstance[]) =>{                                                    
                                                     cupom.itensCupom = itens;
                                                     return cupom;
 
@@ -60,7 +61,7 @@ export class CupomController {
                                 console.log(`======= ${error}`);
                             });
 
-                            res.status(200).send({ result });
+                            res.status(200).send( result );
 
     }
 

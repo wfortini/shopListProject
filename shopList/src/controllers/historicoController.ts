@@ -1,4 +1,3 @@
-import { HistoricInstance } from './../models/HistoricModel';
 import { NextFunction, Request, Response } from "express";
 import db from '../models';
 import { Transaction } from 'sequelize';
@@ -8,35 +7,39 @@ export class HistoricoController {
 
     public async criarHistorico(req: Request, res: Response): Promise<void> {
 
-        const result = await db.sequelize.transaction((t: Transaction) => {
+        let result = undefined;
+        try{
+            result = await db.sequelize.transaction((t: Transaction) => {
 
-                        let historico: HistoricInstance = req.body;
-                        historico.user = 'wellington'; //TODO: somente para teste
-                        return db.Historico.find({
-                            where:{
-                                user: historico.user,
-                                categoria: historico.categoria,
-                                dataFinal: null
-                            }
-                        }).then((historico: HistoricoInstance) => {
-                            
-                            historico.dataInicial = new Date();
-                            if(historico){
-                                historico.numHistorico = historico.numHistorico + 1;
-                                
-                            }else{
-                                historico.numHistorico = 1; 
-                            }
-                            return db.Historico.create(historico, {transaction: t});
-                        });
+                let historicoInput: HistoricoInstance = req.body;
+                historicoInput.user = 'wellington'; //TODO: somente para teste
+                return db.Historico.find({
+                    where:{
+                        user: historicoInput.user,
+                        categoria: historicoInput.categoria,
+                        dataFinal: null
+                    }
+                }).then((historico: HistoricoInstance) => {
+                    
+                    historicoInput.dataInicial = new Date();
+                    if(historico){
+                        historicoInput.numHistorico = historico.numHistorico + 1;
+                        
+                    }else{
+                        historicoInput.numHistorico = 1; 
+                    }
+                    return db.Historico.create(historicoInput, {transaction: t});
+                });
+   
+           });
            
-                   }).catch((error) => {
-                        res.status(400).send(error);
-                        console.log(`======= ${error}`);
-                   });
-                   
+        }catch(e){
+            res.status(400).send(e.errors);
+            console.log(`======= ${e}`);
+        }
 
-                   res.status(200).send({ result });
+        res.status(200).send({ result });
+                  
     }
 
 }

@@ -12,29 +12,33 @@ const models_1 = require("../models");
 class HistoricoController {
     criarHistorico(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield models_1.default.sequelize.transaction((t) => {
-                let historico = req.body;
-                historico.user = 'wellington'; //TODO: somente para teste
-                return models_1.default.Historico.find({
-                    where: {
-                        user: historico.user,
-                        categoria: historico.categoria,
-                        dataFinal: null
-                    }
-                }).then((historico) => {
-                    historico.dataInicial = new Date();
-                    if (historico) {
-                        historico.numHistorico = historico.numHistorico + 1;
-                    }
-                    else {
-                        historico.numHistorico = 1;
-                    }
-                    return models_1.default.Historico.create(historico, { transaction: t });
+            let result = undefined;
+            try {
+                result = yield models_1.default.sequelize.transaction((t) => {
+                    let historicoInput = req.body;
+                    historicoInput.user = 'wellington'; //TODO: somente para teste
+                    return models_1.default.Historico.find({
+                        where: {
+                            user: historicoInput.user,
+                            categoria: historicoInput.categoria,
+                            dataFinal: null
+                        }
+                    }).then((historico) => {
+                        historicoInput.dataInicial = new Date();
+                        if (historico) {
+                            historicoInput.numHistorico = historico.numHistorico + 1;
+                        }
+                        else {
+                            historicoInput.numHistorico = 1;
+                        }
+                        return models_1.default.Historico.create(historicoInput, { transaction: t });
+                    });
                 });
-            }).catch((error) => {
-                res.status(400).send(error);
-                console.log(`======= ${error}`);
-            });
+            }
+            catch (e) {
+                res.status(400).send(e.errors);
+                console.log(`======= ${e}`);
+            }
             res.status(200).send({ result });
         });
     }

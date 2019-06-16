@@ -1,3 +1,4 @@
+import { CupomInstance } from './../models/CupomModel';
 import { ItemCupom } from "./itemCupom";
 
 export class Cupom {
