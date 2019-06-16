@@ -2,6 +2,8 @@ import * as express from 'express';
 import * as compression from 'compression';
 import * as cors from 'cors';
 import { UserRouters }  from "./routes/userRoutes";
+import { CupomRouters } from './routes/cupomRoutes';
+import { HistoricoRouters } from './routes/historicoRoutes';
 
 class App {
 
@@ -16,6 +18,8 @@ class App {
 
     public routes() : void{
         this.express.use("/api/user", new UserRouters().router);
+        this.express.use("/api/cupom", new CupomRouters().router);
+        this.express.use("/api/historico", new HistoricoRouters().router);
     }
 
     public config() : void{

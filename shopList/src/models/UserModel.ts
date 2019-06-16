@@ -6,13 +6,13 @@ export interface UserAttributes{
     id?: string;
     name?: string;
     username?: string;
-    birthDate?: Date;
-    address?: string;
-    zipCode?: string;
-    state?: string;
-    city?: string;
-    addressNumber?: string;
-    password?: string;
+    birthDate: Date;
+    address: string;
+    zipCode: string;
+    state: string;
+    city: string;
+    addressNumber: string;
+    password: string;
     createdAt?: string;
     updated?: string;
 

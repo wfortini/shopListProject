@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (sequelize, DataTypes) => {
-    const historic = sequelize.define('Historic', {
+    const historic = sequelize.define('Historico', {
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
@@ -12,7 +12,7 @@ exports.default = (sequelize, DataTypes) => {
             type: DataTypes.STRING(200),
             allowNull: false
         },
-        dataIncial: {
+        dataInicial: {
             type: DataTypes.DATE,
             allowNull: false
         },
@@ -23,9 +23,13 @@ exports.default = (sequelize, DataTypes) => {
         numHistorico: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        categoria: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     }, {
-        tableName: 'historical'
+        tableName: 'historico'
     });
     historic.associate = (models) => {
         historic.belongsTo(models.User, {

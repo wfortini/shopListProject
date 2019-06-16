@@ -8,10 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const models_1 = require("../models");
 class UserController {
     registerUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            res.status(200).send({ token: "sucesso" });
+            let result = undefined;
+            try {
+                const user = req.body;
+                result = yield models_1.default.sequelize.transaction((t) => {
+                    return models_1.default.User.create(user, { transaction: t });
+                });
+            }
+            catch (e) {
+                res.status(400).send(e.errors);
+                console.log(e);
+            }
+            res.status(200).send({ result });
         });
     }
 }

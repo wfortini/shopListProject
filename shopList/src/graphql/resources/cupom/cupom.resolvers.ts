@@ -41,7 +41,6 @@ export const cupomResolvers = {
                                 throw new Error(`Cupom not found!`);
                              }                         
 
-                            cupom.id = uuidv1();
                             var user = 'wellington';
                             cupom.user = user;
 
@@ -60,7 +59,7 @@ export const cupomResolvers = {
                                 }).then((cupomWithId : CupomInstance) => {
                                     
                                         cupom.itensCupom.forEach(element => {
-                                            element.id = uuidv1();
+                                           
                                             element.cupom = cupomWithId.id;
                                         });
                                         

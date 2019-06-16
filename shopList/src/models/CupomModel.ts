@@ -4,7 +4,7 @@ import { ModelInterface } from '../interfaces/ModelInterface';
 
 export interface CupomAttributes{
 
-    id?: string;
+    id?: number;
     razaoSocial?: string;
     CNPJ?: string;
     endereco?: string;
@@ -34,9 +34,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     const Cupom: CupomModel = 
           sequelize.define('Cupom', {
                id:{
-                  type: DataTypes.STRING,
-                  allowNull: false,
-                  primaryKey: true
+                type: DataTypes.BIGINT,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
                },
                razaoSocial:{
                    type: DataTypes.STRING(128),

@@ -7,11 +7,12 @@ export interface HistoricAttributes{
     id?: number;
     description?: string;
     user?: string;
-   dataIncial?: Date;
-   dataFinal: Date;
-   numHistorico?: number;
-   createdAt?: string;
-   updatedAt?: string;
+    dataInicial?: Date;
+    categoria?: number;
+    dataFinal: Date;
+    numHistorico?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface HistoricInstance extends Sequelize.Instance<HistoricAttributes>, HistoricAttributes {
@@ -25,7 +26,7 @@ export interface HistoricModel extends BaseModelInterface, Sequelize.Model<Histo
 export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) : HistoricModel => {
 
     const historic: HistoricModel = 
-          sequelize.define('Historic', {
+          sequelize.define('Historico', {
                id:{
                   type: DataTypes.BIGINT,
                   allowNull: false,
@@ -36,7 +37,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                    type: DataTypes.STRING(200),
                    allowNull: false
                },
-               dataIncial:{
+               dataInicial:{
                 type: DataTypes.DATE,
                 allowNull: false
             },
@@ -47,10 +48,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
             numHistorico:{
                 type: DataTypes.INTEGER,
                 allowNull: false
+            },
+            categoria:{
+                type: DataTypes.INTEGER,
+                allowNull: false
             }
 
           }, {
-              tableName: 'historical'
+              tableName: 'historico'
           });
 
           historic.associate = (models: ModelInterface): void =>{

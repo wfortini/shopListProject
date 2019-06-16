@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (sequelize, DataTypes) => {
     const Cupom = sequelize.define('Cupom', {
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         razaoSocial: {
             type: DataTypes.STRING(128),

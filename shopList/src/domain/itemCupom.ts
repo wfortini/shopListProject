@@ -1,13 +1,13 @@
 export class ItemCupom {
 
-    id: string;
+    id: number;
     codigo: string;
     descricao: string;
     qtde: number;
     unidade: string;
     valorUnitario: number;
     valorTotal: number; 
-    cupom: string;    
+    cupom: number;    
     createdAt: string;
     updated: string;
 }

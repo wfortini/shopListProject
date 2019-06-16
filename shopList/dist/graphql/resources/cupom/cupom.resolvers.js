@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const scrap_service_1 = require("../../../services/scrap-service");
-const uuidv1 = require("uuid/v1");
 exports.cupomResolvers = {
     Query: {
         cupons: (parent, { id }, { db }, info) => {
@@ -29,7 +28,6 @@ exports.cupomResolvers = {
                 if (cupom.itensCupom == null || cupom.itensCupom.length == 0) {
                     throw new Error(`Cupom not found!`);
                 }
-                cupom.id = uuidv1();
                 var user = 'wellington';
                 cupom.user = user;
                 return db.Historico.find({
@@ -45,7 +43,6 @@ exports.cupomResolvers = {
                         return db.Cupom.create(cupom, { transaction: t });
                     }).then((cupomWithId) => {
                         cupom.itensCupom.forEach(element => {
-                            element.id = uuidv1();
                             element.cupom = cupomWithId.id;
                         });
                         return db.sequelize.transaction((t) => {
