@@ -43,14 +43,7 @@ export function register(data) {
             auth.createUserWithEmailAndPassword(email, password)
                 .then((resp) => {
                     let user = {username, uid: resp.user.uid}
-                    const userRef = database.ref().child('users');
-
-                    userRef.child(user.uid).update({...user})
-                        .then(() => {
-                            dispatch({type: t.LOGGED_IN, user});
-                            resolve(user)
-                        })
-                        .catch((error) => reject({message: error}));
+                    
                 })
                 .catch((error) => reject(error));
         })
@@ -61,8 +54,6 @@ export function signInWithFacebook(fbToken) {
     return (dispatch) => {
 
         return new Promise((resolve, reject) => {
-            console.log(fbToken);
-              //const credential = provider.credential(fbToken);
               const credential = firebase.auth.FacebookAuthProvider.credential(fbToken);
               auth.signInWithCredential(credential)
                    .then((userCredential) => {
