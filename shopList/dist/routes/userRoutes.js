@@ -9,7 +9,7 @@ class UserRouters {
         this.routers();
     }
     routers() {
-        this.router.post("/register", this.userController.registerUser);
+        this.router.post("", this.userController.registerUser);
     }
 }
 exports.UserRouters = UserRouters;

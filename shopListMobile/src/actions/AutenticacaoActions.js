@@ -1,6 +1,7 @@
 import {auth, database, provider} from "../config/Firebase";
 import * as t from '../config/ActionTypes';
 import * as firebase from 'firebase';
+import request from '../services/Request';
 
 import {AsyncStorage} from 'react-native';
 
@@ -26,8 +27,7 @@ export const modificaNome = (texto) => {
     }
 }
 
-export const modificaNomeUsuario = (texto) => {
-    console.log(texto);
+export const modificaNomeUsuario = (texto) => {    
     return {
         type: t.MODIFICA_NOME_USUARIO,
         payload: texto
@@ -41,8 +41,23 @@ export function register(data) {
         return new Promise((resolve, reject) => {
             const {email, password, username} = data;
             auth.createUserWithEmailAndPassword(email, password)
-                .then((resp) => {
-                    let user = {username, uid: resp.user.uid}
+                .then((resp) => { 
+                    let user = {id: resp.user.uid, name: username, username: username}
+                    registerUser(user)
+                    .then((result) => {
+
+                        if(!!result){
+                            auth.currentUser.getIdToken(/* forceRefresh */ true)
+                            .then((idToken) => {
+                                dispatch({type: t.LOGGED_IN, user, idToken});
+                                                                
+                            }).catch((error) => {
+                                console.log(`error get token ${error}`);
+                            });
+
+                        }
+                        console.log(`usuario registrado ${result}`);
+                    });                    
                     
                 })
                 .catch((error) => reject(error));
@@ -84,4 +99,8 @@ export function signInWithFacebook(fbToken) {
 
         }); // new Promise
     }
+}
+
+function registerUser(user) {
+        return request.post('/api/user', user);
 }

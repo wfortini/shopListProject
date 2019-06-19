@@ -23,7 +23,19 @@ class UserController {
                 res.status(400).send(e.errors);
                 console.log(e);
             }
-            res.status(200).send({ result });
+            res.status(200).send(result);
+        });
+    }
+    findByUID(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                var result = yield models_1.default.User.findOne({ where: { id: req.params.uid }
+                });
+            }
+            catch (error) {
+                res.status(400).send(error.errors);
+            }
+            res.status(200).send(result);
         });
     }
 }
