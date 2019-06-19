@@ -17,9 +17,6 @@ export default (state = INITIAL_STATE, action) => {
         case t.LOGGED_IN:
             const user = action.user;
             const token = action.idToken;
-
-            console.log(`${user} == ${token}`);
-
             // Save token and data to Asyncstorage
             AsyncStorage.multiSet([
                 ['@user', JSON.stringify(user)],

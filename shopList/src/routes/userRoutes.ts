@@ -14,6 +14,7 @@ export class UserRouters {
 
       routers(){
           this.router.post("", this.userController.registerUser);
+          this.router.get("/:uid", this.userController.findByUID);
       }
 
 
