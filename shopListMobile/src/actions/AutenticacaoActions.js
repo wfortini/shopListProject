@@ -50,17 +50,34 @@ export function register(data) {
                             auth.currentUser.getIdToken(/* forceRefresh */ true)
                             .then((idToken) => {
                                 dispatch({type: t.LOGGED_IN, user, idToken});
+                                resolve(user);
                                                                 
                             }).catch((error) => {
                                 console.log(`error get token ${error}`);
                             });
-
                         }
-                        console.log(`usuario registrado ${result}`);
+                        
+                    }).catch((error) => {
+                          console.log(`Erro http ${error.message}`);
+                          console.log(`Erro http response ${error.response}`);
                     });                    
                     
-                })
-                .catch((error) => reject(error));
+                }).catch((error) => { // catch  createUserWithEmailAndPassword
+                      
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    if (errorCode === 'auth/email-already-in-use') {
+                      alert('Email já em uso.');
+                    } else if (errorCode === 'auth/invalid-email') {
+                         alert('Email invalido.');
+                    } else if(errorCode === 'auth/operation-not-allowed'){
+                        alert('Operação não permitida, habilite funcionalidade no FireBase');
+                    } else if(errorCode === 'auth/weak-password'){
+                        alert('Password muito fraco.');
+                    }else{
+                        alert('Ocorreu um erro durante criação do usuario');
+                    }
+                });
         })
     };
 }

@@ -16,7 +16,7 @@ export class UserController {
                 return db.User.create(user, {transaction: t});
             });
         }catch(e){
-            res.status(400).send(e.errors );
+            res.status(400).send({message: 'erro api', errors: e.errors} );
            console.log(e);
         }       
         res.status(200).send( result );
@@ -24,16 +24,16 @@ export class UserController {
     }
 
     public async findByUID(req: Request, res: Response): Promise<void> {
+            
+        let result = undefined;
            try{
-               var result = await db.User.findOne({ where:
+               result = await db.User.findOne({ where:
                                         { id: req.params.uid} 
                                     });
            }catch(error){
               res.status(400).send( error.errors );
-           }
-           
+           }           
            res.status(200).send( result) ;
-
 
     }
 

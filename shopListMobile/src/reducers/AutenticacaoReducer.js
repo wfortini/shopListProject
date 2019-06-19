@@ -1,4 +1,5 @@
 import * as t from '../config/ActionTypes';
+import {AsyncStorage} from 'react-native';
 
 const INITIAL_STATE = {
     nome: '',
@@ -21,7 +22,7 @@ export default (state = INITIAL_STATE, action) => {
 
             // Save token and data to Asyncstorage
             AsyncStorage.multiSet([
-                ['@user', JSON.stringify(result)],
+                ['@user', JSON.stringify(user)],
                 ['@token', token],
             ]);
 

@@ -20,7 +20,7 @@ class UserController {
                 });
             }
             catch (e) {
-                res.status(400).send(e.errors);
+                res.status(400).send({ message: 'erro api', errors: e.errors });
                 console.log(e);
             }
             res.status(200).send(result);
@@ -28,8 +28,9 @@ class UserController {
     }
     findByUID(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            let result = undefined;
             try {
-                var result = yield models_1.default.User.findOne({ where: { id: req.params.uid }
+                result = yield models_1.default.User.findOne({ where: { id: req.params.uid }
                 });
             }
             catch (error) {
