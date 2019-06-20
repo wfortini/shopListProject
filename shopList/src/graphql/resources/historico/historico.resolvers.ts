@@ -23,7 +23,7 @@ export const historicoResolvers = {
         createHistorico: (parent, args, {db}:{db: DbConnection}, info: GraphQLResolveInfo) =>   {
                return db.sequelize.transaction((t: Transaction) => {
 
-                     args.input.user = 'wellington';
+                    args.input.user = 'wellington';
                     return db.Historico.find({
                         where:{
                             user: args.input.user,

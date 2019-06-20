@@ -1,4 +1,5 @@
 import * as t from '../config/ActionTypes';
+import {AsyncStorage} from 'react-native';
 
 const INITIAL_STATE = {
     nome: '',
@@ -15,10 +16,11 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case t.LOGGED_IN:
             const user = action.user;
-
+            const token = action.idToken;
             // Save token and data to Asyncstorage
             AsyncStorage.multiSet([
-                ['user', JSON.stringify(user)]
+                ['@user', JSON.stringify(user)],
+                ['@token', token],
             ]);
 
             return {...state, isLoggedIn: true, user };

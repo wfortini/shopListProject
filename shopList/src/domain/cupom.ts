@@ -1,8 +1,9 @@
+import { CupomInstance } from './../models/CupomModel';
 import { ItemCupom } from "./itemCupom";
 
 export class Cupom {
 
-    id: string;
+    id: number;
     razaoSocial: string;
     CNPJ: string;
     endereco: string;

@@ -1,6 +1,7 @@
 import {auth, database, provider} from "../config/Firebase";
 import * as t from '../config/ActionTypes';
 import * as firebase from 'firebase';
+import request from '../services/Request';
 
 import {AsyncStorage} from 'react-native';
 
@@ -26,8 +27,7 @@ export const modificaNome = (texto) => {
     }
 }
 
-export const modificaNomeUsuario = (texto) => {
-    console.log(texto);
+export const modificaNomeUsuario = (texto) => {    
     return {
         type: t.MODIFICA_NOME_USUARIO,
         payload: texto
@@ -41,56 +41,107 @@ export function register(data) {
         return new Promise((resolve, reject) => {
             const {email, password, username} = data;
             auth.createUserWithEmailAndPassword(email, password)
-                .then((resp) => {
-                    let user = {username, uid: resp.user.uid}
-                    const userRef = database.ref().child('users');
-
-                    userRef.child(user.uid).update({...user})
-                        .then(() => {
-                            dispatch({type: t.LOGGED_IN, user});
-                            resolve(user)
-                        })
-                        .catch((error) => reject({message: error}));
-                })
-                .catch((error) => reject(error));
+                .then((resp) => { 
+                    let user = {id: resp.user.uid, name: username, username: username}
+                    registerUser(user)
+                    .then((result) => {
+                        if(!!result){
+                            auth.currentUser.getIdToken(/* forceRefresh */ true)
+                            .then((idToken) => {
+                                dispatch({type: t.LOGGED_IN, user, idToken});
+                                resolve(user);
+                                                                
+                            }).catch((error) => {
+                                console.log(`error get token ${error}`);
+                            });
+                        }
+                        
+                    }).catch((error) => {
+                          console.log(`Erro http ${error.message}`);
+                          console.log(`Erro http response ${error.response}`);
+                    });                    
+                    
+                }).catch((error) => { // catch  createUserWithEmailAndPassword
+                      
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    if (errorCode === 'auth/email-already-in-use') {
+                      alert('Email já em uso.');
+                    } else if (errorCode === 'auth/invalid-email') {
+                         alert('Email invalido.');
+                    } else if(errorCode === 'auth/operation-not-allowed'){
+                        alert('Operação não permitida, habilite funcionalidade no FireBase');
+                    } else if(errorCode === 'auth/weak-password'){
+                        alert('Password muito fraco.');
+                    }else{
+                        alert('Ocorreu um erro durante criação do usuario');
+                    }
+                });
         })
     };
 }
 
 export function signInWithFacebook(fbToken) {
     return (dispatch) => {
-
+        let exists = undefined;
+        let user = undefined;
         return new Promise((resolve, reject) => {
-            console.log(fbToken);
-              //const credential = provider.credential(fbToken);
               const credential = firebase.auth.FacebookAuthProvider.credential(fbToken);
               auth.signInWithCredential(credential)
                    .then((userCredential) => {
-                       var user = userCredential.user;
-                       // obter user do backend se existir
-                       // se não exitir, incluir
-                       const exists = false; // verificar no backend
-                       console.log(`facebook === ${user}`);
-                       console.log(user.uid);
-                       console.log(user.displayName);
-                       console.log(user.toJSON());
-                       if(!exists){
-                           // incluir backend
+                       user = userCredential.user;
+                       if(!user){
+                           exists = false;
+                           reject();
                        }
-
-                       if(exists){
-                           user = user; // user retornada do backend
-                       }
-
-                       if(exists){
-                           dispatch({type: t.LOGGED_IN, user});
-                        }
-                        resolve({exists, user});
+                       exists = true;
+                       getUser(user.uid)
+                       .then((userInstance) => {                           
+                           if(!!userInstance){
+                                auth.currentUser.getIdToken(/* forceRefresh */ true)
+                                .then((idToken) => {
+                                    dispatch({type: t.LOGGED_IN, user : userInstance, idToken});
+                                    resolve(exists, userInstance);                                                                
+                                }).catch((error) => {
+                                    console.log(`error get token ${error}`);
+                                });
+                           }
+                       }).catch((error) => {
+                           if(error.message.indexOf('404') > 0) {
+                                let newUser = {id: user.uid, name: user.displayName, username: user.email}
+                                registerUser(newUser)
+                                .then((result) => {
+                                    if(!!result){
+                                        auth.currentUser.getIdToken(/* forceRefresh */ true)
+                                        .then((idToken) => {
+                                            dispatch({type: t.LOGGED_IN, user: result, idToken});
+                                            resolve(exists, result);                                                                            
+                                        }).catch((error) => {
+                                            console.log(`error get token ${error}`);
+                                        });
+                                    }
+                                    
+                                }).catch((error) => {
+                                    console.log(`Erro http ${error.message}`);
+                                    console.log(`Erro http response ${error.response}`);
+                                });
+                           }else{
+                               console.log(`result ${JSON.stringify(error, null, 4)}`); 
+                           }
+                          
+                       });  // fim getUser                   
                         
-                   }).catch((error) => {
+                   }).catch((error) => { // catch signInWithCredential
                        console.log(error); 
                       reject(error)});
 
         }); // new Promise
     }
+}
+
+function registerUser(user) {
+        return request.post('/api/user', user);
+}
+function getUser(uid){
+    return request.get(`/api/user/${uid}`);
 }

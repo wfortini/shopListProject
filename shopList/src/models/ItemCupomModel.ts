@@ -4,14 +4,14 @@ import { ModelInterface } from '../interfaces/ModelInterface';
 
 export interface ItemCupomAttributes{
 
-    id?: string;
+    id?: number;
     codigo?: string;
     descricao?: string;
     qtde?: number;
     unidade?: string;
     valorUnitario?: number;
     valorTotal?: number; 
-    cupom?: string;    
+    cupom?: number;    
     createdAt?: string;
     updated?: string;
 
@@ -25,9 +25,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     const itemCupom: ItemCupomModel = 
           sequelize.define('ItemCupom', {
                id:{
-                  type: DataTypes.STRING,
-                  allowNull: false,
-                  primaryKey: true
+                type: DataTypes.BIGINT,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
                },
                codigo:{
                    type: DataTypes.STRING(128),
@@ -54,7 +55,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                 allowNull: true
             },
             cupom:{
-                type: DataTypes.STRING,
+                type: DataTypes.BIGINT,
                 allowNull: false
             }            
 

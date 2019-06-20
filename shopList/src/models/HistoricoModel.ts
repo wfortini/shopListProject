@@ -7,7 +7,7 @@ export interface HistoricoAttributes{
     id?: number;
     descricao?: string;
     user?: string;
-   dataIncial: Date;
+   dataInicial: Date;
    dataFinal: Date;
    numHistorico: number;
    categoria: number;
@@ -37,7 +37,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                    type: DataTypes.STRING(200),
                    allowNull: false
                },
-               dataIncial:{
+               dataInicial:{
                 type: DataTypes.DATE,
                 allowNull: true
             },

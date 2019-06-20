@@ -54,7 +54,7 @@ const FormEmail = props => {
         <TextInput
           style={styles.body}
           placeholder="Nome completo"
-          oonChangeText={texto => props.modificaNome(texto) }
+          onChangeText={texto => props.modificaNomeUsuario(texto) }
           value={props.nomeUsuario}
           placeholderTextColor={AppStyles.color.grey}
           underlineColorAndroid="transparent"
