@@ -10,7 +10,7 @@ import {  StyleSheet,  TouchableOpacity,  Text,  Animated,  Easing,  Image,  Ale
   ImageBackground, KeyboardAvoidingView, TextInput,  } from 'react-native';
 
 import { connect } from 'react-redux';
-import { modificaEmail, modificaSenha, signInWithFacebook } from '../../actions/AutenticacaoActions';
+import { modificaEmail, modificaSenha, signInWithFacebook, login } from '../../actions/AutenticacaoActions';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -26,8 +26,6 @@ import { Actions } from 'react-native-router-flux';
 
 const Login = props => {
 
-    console.log(props);
-
     const buttonAnimated = new Animated.Value(0);
     const growAnimated = new Animated.Value(0);
 
@@ -39,6 +37,21 @@ const Login = props => {
       inputRange: [0, 1],
       outputRange: [1, MARGIN],
     });
+
+    onLogin = () => {
+          
+          const data = {
+              email: props.email,
+              password: props.senha
+          };
+
+          props.login(data)
+          .then((exists, user) => {
+              if(exists) Actions.home();
+          })
+             
+
+    }
 
     onSubmit = () => {
       LoginManager.logInWithReadPermissions(["public_profile", "email"])
@@ -140,7 +153,8 @@ const mapStateToProps = state => (
 
 export default connect(mapStateToProps, { modificaEmail,
                        modificaSenha,
-                       signInWithFacebook })(Login);
+                       signInWithFacebook,
+                       login })(Login);
 
 
 const styles = StyleSheet.create({

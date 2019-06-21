@@ -139,6 +139,36 @@ export function signInWithFacebook(fbToken) {
     }
 }
 
+export function login(data) {
+
+    return (dispatch) =>{
+        return new Promise((resolve, reject) =>{
+            const {email, password} = data;
+            auth.signInWithEmailAndPassword(email, password)
+             .then((resp) => {
+                console.log(`response  ${JSON.stringify(resp, null, 4)}`); 
+                let {user} = resp;
+                getUser(user.uid)
+                .then((result) => {
+                    if(!!result.data){
+                       user = result.data;
+                       dispatch({type: t.LOGGED_IN, user});
+                       var exists = true;
+                       resolve({exists, user});
+                    }
+
+                }).catch((error) => {
+
+                });
+             }).catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+             });
+        }
+    }
+
+}
+
 function registerUser(user) {
         return request.post('/api/user', user);
 }
