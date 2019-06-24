@@ -13,7 +13,11 @@ export class CupomController {
     public async criarCupom(req: Request, res: Response): Promise<void> {
 
         //TODO: verificar se nfce já foi importada
-        const nfce = req.body;
+        const nfce = req.body;        
+
+        if(!nfce.value){
+            res.status(400).send({message: 'nfce invalido.'});
+        }
 
         const scraping = new Scraping();        
         const result = await  scraping.scrapCupom(nfce.value)
