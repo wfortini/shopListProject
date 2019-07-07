@@ -12,7 +12,7 @@ export class HistoricoController {
             result = await db.sequelize.transaction((t: Transaction) => {
 
                 let historicoInput: HistoricoInstance = req.body;
-                historicoInput.user = 'wellington'; //TODO: somente para teste
+                historicoInput.user = req.app.get("user");
                 return db.Historico.find({
                     where:{
                         user: historicoInput.user,

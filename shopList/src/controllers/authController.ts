@@ -1,16 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import * as admin from 'firebase-admin';
-
-var serviceAccount = require("/home/wellington/projetoNode/shoplist-664da-firebase-adminsdk-wic97-c4ce212cee.json");
+//import * as admin from 'firebase-admin';
+import admin from '../config/Firebase';
 
 export class AuthController  {   
      
     constructor(){
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            databaseURL: "https://shoplist-664da.firebaseio.com"
-            });
-    }    
+    }
 
     public autenticarJWT(req: Request, res: Response, next: NextFunction) {
 
@@ -23,7 +18,8 @@ export class AuthController  {
             .then(function(decodedToken) {
               var uid = decodedToken.uid;
               console.log(`  uid ${uid}`);
-              req.params.uid = uid;
+              req.app.set("user", uid);
+              req.params.user = uid;
               next();
             }).catch(function(error) {
                 var code = error.code;

@@ -17,7 +17,7 @@ exports.default = (sequelize, DataTypes) => {
             allowNull: false,
         },
         qtde: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL(10, 4),
             allowNull: true
         },
         unidade: {

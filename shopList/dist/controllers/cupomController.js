@@ -15,6 +15,7 @@ class CupomController {
         return __awaiter(this, void 0, void 0, function* () {
             //TODO: verificar se nfce já foi importada
             const nfce = req.body;
+            const user = req.app.get("user");
             if (!nfce.value) {
                 res.status(400).send({ message: 'nfce invalido.' });
             }
@@ -24,7 +25,7 @@ class CupomController {
                 if (cupom.itensCupom == null || cupom.itensCupom.length == 0) {
                     throw new Error(`Cupom not found!`);
                 }
-                var user = 'wellington';
+                //var user = 'wellington';
                 cupom.user = user;
                 return models_1.default.Historico.find({
                     where: {

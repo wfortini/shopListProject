@@ -1,24 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const admin = require("firebase-admin");
-var serviceAccount = require("/home/wellington/projetoNode/shoplist-664da-firebase-adminsdk-wic97-c4ce212cee.json");
+//import * as admin from 'firebase-admin';
+const Firebase_1 = require("../config/Firebase");
 class AuthController {
     constructor() {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            databaseURL: "https://shoplist-664da.firebaseio.com"
-        });
     }
     autenticarJWT(req, res, next) {
         let authorization = req.get('authorization');
         let token = authorization ? authorization.split(' ')[1] : undefined;
         if (token !== undefined) {
             console.log(`  token ${token}`);
-            admin.auth().verifyIdToken(token)
+            Firebase_1.default.auth().verifyIdToken(token)
                 .then(function (decodedToken) {
                 var uid = decodedToken.uid;
                 console.log(`  uid ${uid}`);
-                req.params.uid = uid;
+                req.app.set("user", uid);
+                req.params.user = uid;
                 next();
             }).catch(function (error) {
                 var code = error.code;

@@ -5,7 +5,6 @@ import { Scraping } from "../services/scrap-service";
 import { Cupom } from "../domain/cupom";
 import { HistoricoInstance } from "../models/HistoricoModel";
 import { CupomInstance } from "../models/CupomModel";
-import { ItemCupom } from "../domain/itemCupom";
 import { ItemCupomInstance } from "../models/ItemCupomModel";
 
 export class CupomController {
@@ -13,7 +12,8 @@ export class CupomController {
     public async criarCupom(req: Request, res: Response): Promise<void> {
 
         //TODO: verificar se nfce já foi importada
-        const nfce = req.body;        
+        const nfce = req.body;   
+        const user = req.app.get("user");    
 
         if(!nfce.value){
             res.status(400).send({message: 'nfce invalido.'});
@@ -27,7 +27,7 @@ export class CupomController {
                                     throw new Error(`Cupom not found!`);
                                 }
                                 
-                                var user = 'wellington';
+                                //var user = 'wellington';
                                 cupom.user = user;
 
                             return db.Historico.find({

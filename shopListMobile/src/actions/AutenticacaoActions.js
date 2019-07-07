@@ -85,6 +85,7 @@ export function signInWithFacebook(fbToken) {
     return (dispatch) => {
         let exists = undefined;
         let user = undefined;
+        console.log(fbToken);
         return new Promise((resolve, reject) => {
               const credential = firebase.auth.FacebookAuthProvider.credential(fbToken);
               auth.signInWithCredential(credential)
@@ -164,7 +165,7 @@ export function login(data) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
              });
-        }
+        });
     }
 
 }

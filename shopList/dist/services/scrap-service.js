@@ -58,7 +58,7 @@ class Scraping {
                 var total = scrap(this).find('.valor').text().trim();
                 var item = new itemCupom_1.ItemCupom();
                 item.descricao = nome;
-                item.qtde = quantidade;
+                item.qtde = quantidade.trim().replace(',', '.');
                 item.codigo = codigo.trim().substr(0, codigo.length - 1);
                 item.unidade = unidade.trim();
                 item.valorTotal = total.trim().replace(',', '.');

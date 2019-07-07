@@ -66,7 +66,7 @@ export class Scraping {
         
             var item = new ItemCupom();
             item.descricao = nome;
-            item.qtde = quantidade;
+            item.qtde = quantidade.trim().replace(',', '.');
             item.codigo = codigo.trim().substr(0, codigo.length - 1);
             item.unidade = unidade.trim();
             item.valorTotal = total.trim().replace(',', '.');

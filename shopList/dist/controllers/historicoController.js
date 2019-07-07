@@ -16,7 +16,7 @@ class HistoricoController {
             try {
                 result = yield models_1.default.sequelize.transaction((t) => {
                     let historicoInput = req.body;
-                    historicoInput.user = 'wellington'; //TODO: somente para teste
+                    historicoInput.user = req.app.get("user");
                     return models_1.default.Historico.find({
                         where: {
                             user: historicoInput.user,
