@@ -57,7 +57,7 @@ export class Scraping {
             
             var nome = scrap(this).find('.txtTit').not('.noWrap').text().trim();
 
-            var codigo = scrap(this).find('.RCod').text().trim().substring(8);
+            var codigo = scrap(this).find('.RCod').text().trim().substr(8);
 
             var quantidade = scrap(this).find('.Rqtd').text().trim().substr(6);
             var unidade = scrap(this).find('.RUN').text().trim().substr(3);
@@ -67,7 +67,10 @@ export class Scraping {
             var item = new ItemCupom();
             item.descricao = nome;
             item.qtde = quantidade.trim().replace(',', '.');
-            item.codigo = codigo.trim().substr(0, codigo.length - 1);
+
+            var endIndex = codigo.split(")");
+            codigo = endIndex[0];         
+            item.codigo = codigo.trim();
             item.unidade = unidade.trim();
             item.valorTotal = total.trim().replace(',', '.');
             item.valorUnitario = valorUnidade.trim().replace(',', '.');
