@@ -74,37 +74,33 @@ const Login = props => {
             
                  <View  style={[styles.containerInput, {justifyContent: 'center'}]}>
                                    
-                    <Input  
-                      style={styles.input}                   
-                      placeholder="Usuário"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.email}                    
-                      onChangeText={texto => props.modificaEmail(texto) }
-                      leftIcon={
-                        <Icon
-                          name='user'
-                          size={24}
-                          color='black'
-                        />
-                      }
+                    <Input  placeholder="Usuário"
+                            autoCorrect={false}
+                            autoCapitalize={'none'}
+                            returnKeyType={'none'}
+                            value={props.email}                    
+                            onChangeText={texto => props.modificaEmail(texto) }
+                            leftIcon={
+                              <Icon
+                                name='user'
+                                size={24}
+                                color='black'
+                              />
+                            }
                     />
 
                   </View>
                   <View  style={[styles.containerInput]}>
                     
-                        <Input  
-                          containerStyle={styles.input}                      
-                          placeholder={"Password"}
-                          secureTextEntry={true}
-                          autoCorrect={false}
-                          autoCapitalize={'none'}
-                          returnKeyType={'done'}
-                          value={props.senha}                        
-                          underlineColorAndroid="transparent"
-                          onChangeText={texto => props.modificaSenha(texto) }
-                          leftIcon={
+                     <Input placeholder={"Password"}
+                            secureTextEntry={true}
+                            autoCorrect={false}
+                            autoCapitalize={'none'}
+                            returnKeyType={'done'}
+                            value={props.senha}                        
+                            underlineColorAndroid="transparent"
+                            onChangeText={texto => props.modificaSenha(texto) }
+                            leftIcon={
                             <Icon
                               name='lock'
                               size={24}
@@ -122,19 +118,21 @@ const Login = props => {
                       </TouchableOpacity >
                   </View>
 
-                </View>
-                
+                </View> 
             
                   
-                 <View style={styles.constainerButton} >
-                     <Button style={styles.button}>
-                       
-                        <Text >Entrat</Text>
-                     </Button>
+                 <View style={styles.constainerButton} > 
+                     <Button buttonStyle={styles.button} type="outline" title="Entrar" /> 
                  </View> 
-                 
-                  
-                 
+
+                 <View style={ {flex: 2, alignContent: 'center'} } >
+                    <View style={ styles.containerSocial }>       
+                        <Text style={ {padding: 20} }  >Entrar com login social?</Text>
+
+                        <SocialIcon  type='facebook'/>
+                    </View>
+                    
+                 </View>
              </View>        
        
     );
@@ -159,26 +157,27 @@ export default connect(mapStateToProps, { modificaEmail,
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    backgroundColor: '#2EFEF7'
+    //backgroundColor: '#2EFEF7'
   },
   containerInput:{
     flex: 1,
-    backgroundColor: '#0431B4',   
+    //backgroundColor: '#0431B4',   
   },
   constainerHeader:{
     flex:2,
-    backgroundColor: '#FF0040',
+   // backgroundColor: '#FF0040',
     alignItems: 'center',
     justifyContent: 'center',
   },
   constainerButton:{
-    flex: 2,
-    backgroundColor: '#F5DA81'
+    flex: 1,    
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   constainerCreater:{
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#0431B4'
+    //backgroundColor: '#0431B4'
   },
 
   inlineImg: {
@@ -210,11 +209,18 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',    
-    height: MARGIN,
+    height: 50,
     borderRadius: 20,
     zIndex: 100,
+    width: DEVICE_WIDTH - 40,
 
   },
+  containerSocial:{
+    flex: 1,
+    justifyContent: 'center',  
+    alignItems: 'center'
+    
+  }
 
 
 
