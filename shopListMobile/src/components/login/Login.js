@@ -66,13 +66,13 @@ const Login = props => {
                       <Icon
                         name='cart-arrow-down'
                         size={90}
-                        color='black'
+                        color='#4169E1'
                       />
                       <Text>ShopList</Text>
                   </View>
           
             
-                 <View  style={[styles.containerInput, {justifyContent: 'center'}]}>
+                 <View  style={[styles.containerInput]}>
                                    
                     <Input  placeholder="Usuário"
                             autoCorrect={false}
@@ -80,18 +80,20 @@ const Login = props => {
                             returnKeyType={'none'}
                             value={props.email}                    
                             onChangeText={texto => props.modificaEmail(texto) }
+                            inputStyle={ {fontSize: 16, paddingLeft: 10 } }
+                            containerStyle={ styles.input } 
+                            underlineColorAndroid='transparent'
                             leftIcon={
                               <Icon
                                 name='user'
-                                size={24}
-                                color='black'
+                                size={20}
+                                color='#4169E1'
                               />
                             }
                     />
 
                   </View>
-                  <View  style={[styles.containerInput]}>
-                    
+                  <View  style={[styles.containerInput]}>                    
                      <Input placeholder={"Password"}
                             secureTextEntry={true}
                             autoCorrect={false}
@@ -100,21 +102,23 @@ const Login = props => {
                             value={props.senha}                        
                             underlineColorAndroid="transparent"
                             onChangeText={texto => props.modificaSenha(texto) }
+                            inputStyle={ {fontSize: 16, paddingLeft: 10 } }                            
+                            containerStyle={ styles.input } 
                             leftIcon={
                             <Icon
                               name='lock'
-                              size={24}
-                              color='black'
+                              size={20}
+                              color='#4169E1'
                             />
                           }
                         />
 
                      <View style={styles.constainerCreater}>
                         <TouchableOpacity onPress={() => Actions.formCadastro() }>
-                             <Text style={styles.textLabel}>Criar sua conta</Text>
+                             <Text style={ [ styles.textLabel, { paddingLeft: 50 } ] }>Criar sua conta</Text>
                         </TouchableOpacity >
                         <TouchableOpacity >
-                            <Text style={[styles.textLabel, {paddingLeft: 50}]}>Esqueceu sua senha?</Text>
+                            <Text style={ [ styles.textLabel, { paddingRight : 55 } ] }>Esqueceu sua senha?</Text>
                       </TouchableOpacity >
                   </View>
 
@@ -122,14 +126,14 @@ const Login = props => {
             
                   
                  <View style={styles.constainerButton} > 
-                     <Button buttonStyle={styles.button} type="outline" title="Entrar" /> 
+                     <Button buttonStyle={styles.button} type="outline" title="Entrar"
+                         onPress={ this.onLogin }  /> 
                  </View> 
-
                  <View style={ {flex: 2, alignContent: 'center'} } >
                     <View style={ styles.containerSocial }>       
-                        <Text style={ {padding: 20} }  >Entrar com login social?</Text>
+                        <Text style={ {padding: 20, fontSize: 16} }  >Entrar com login social?</Text>
 
-                        <SocialIcon  type='facebook'/>
+                        <SocialIcon  type='facebook' onPress={this.onSubmit} />
                     </View>
                     
                  </View>
@@ -161,7 +165,9 @@ const styles = StyleSheet.create({
   },
   containerInput:{
     flex: 1,
-    //backgroundColor: '#0431B4',   
+    //backgroundColor: '#0431B4', 
+    alignItems: 'center',
+    justifyContent: 'center',  
   },
   constainerHeader:{
     flex:2,
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
   constainerCreater:{
     flex: 1,
     flexDirection: 'row',
-    //backgroundColor: '#0431B4'
+      
   },
 
   inlineImg: {
@@ -189,29 +195,25 @@ const styles = StyleSheet.create({
     top: 9,
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     width: DEVICE_WIDTH - 40,
-    height: 50,
-    marginHorizontal: 20,
-    paddingLeft: 45,
+    height: 50,    
     borderRadius: 20,
-    color: '#ffffff',
+    borderWidth: 1,
     fontSize: 16,
+    borderColor: '#4169E1',    
 
   },
-  textLabel: {
-    color: '#000000',
+  textLabel: {    
     backgroundColor: 'transparent',
     fontSize: 16,
-    paddingLeft: 17,
-    paddingTop: 5
+    paddingLeft: 30,
+    paddingTop: 10
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',    
     height: 50,
-    borderRadius: 20,
-    zIndex: 100,
+    borderRadius: 20,    
     width: DEVICE_WIDTH - 40,
 
   },
