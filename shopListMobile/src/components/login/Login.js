@@ -6,7 +6,7 @@ const { LoginManager, AccessToken } = FBSDK;
 
 import Dimensions from 'Dimensions';
 
-import {  StyleSheet,  TouchableOpacity,  Text,  Animated,  Easing,  Image,  Alert,  View,
+import {  StyleSheet,  TouchableOpacity,  Text,  ActivityIndicator,  Easing,  Image,  Alert,  View,
   ImageBackground, KeyboardAvoidingView, TextInput,  } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -25,7 +25,20 @@ import bgSrc from '../../images/Blue-watercolor-wet-background-vector-03.jpg';
 
 import { Actions } from 'react-native-router-flux';
 
-const Login = props => {   
+const Login = props => { 
+  
+     onRenderBtnAcessar = ()  => {
+           if( props.loading_login ){
+             return (
+                  <ActivityIndicator size="large" />
+             )
+           }
+           return  (
+                     <Button buttonStyle={styles.button} type="outline" title="Entrar"
+                          onPress={ this.onLogin }  /> 
+           )
+           
+     }
 
     onLogin = () => {          
           const data = {
@@ -59,8 +72,7 @@ const Login = props => {
 
     
     return (
-
-            <View style={styles.container}  >
+              <View style={styles.container} >       
 
                   <View style={styles.constainerHeader}>
                       <Icon
@@ -91,9 +103,8 @@ const Login = props => {
                               />
                             }
                     />
-
-                  </View>
-                  <View  style={[styles.containerInput]}>                    
+                    </View>
+                    <View  style={[styles.containerInput]}>              
                      <Input placeholder={"Password"}
                             secureTextEntry={true}
                             autoCorrect={false}
@@ -112,22 +123,18 @@ const Login = props => {
                             />
                           }
                         />
-
+                     </View>
                      <View style={styles.constainerCreater}>
                         <TouchableOpacity onPress={() => Actions.formCadastro() }>
-                             <Text style={ [ styles.textLabel, { paddingLeft: 50 } ] }>Criar sua conta</Text>
+                             <Text style={ [ styles.textLabel, { paddingLeft: 40 } ] }>Criar sua conta</Text>
                         </TouchableOpacity >
                         <TouchableOpacity >
                             <Text style={ [ styles.textLabel, { paddingRight : 55 } ] }>Esqueceu sua senha?</Text>
                       </TouchableOpacity >
-                  </View>
-
-                </View> 
-            
+                  </View>           
                   
                  <View style={styles.constainerButton} > 
-                     <Button buttonStyle={styles.button} type="outline" title="Entrar"
-                         onPress={ this.onLogin }  /> 
+                    { this.onRenderBtnAcessar() }
                  </View> 
                  <View style={ {flex: 2, alignContent: 'center'} } >
                     <View style={ styles.containerSocial }>       
@@ -148,7 +155,9 @@ const Login = props => {
 const mapStateToProps = state => (
     {
         email: state.AutenticacaoReducer.email,
-        password: state.AutenticacaoReducer.senha
+        password: state.AutenticacaoReducer.senha,
+        loading_login: state.AutenticacaoReducer.loading_login
+
     }
 )
 
@@ -170,7 +179,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',  
   },
   constainerHeader:{
-    flex:2,
+    flex:3,
    // backgroundColor: '#FF0040',
     alignItems: 'center',
     justifyContent: 'center',

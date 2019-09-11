@@ -7,7 +7,9 @@ const INITIAL_STATE = {
     senha: '',
     nomeUsuario: '',
     isLoggedIn: false, 
-    user: null
+    user: null,
+    loading_login: false,
+    loading_cadastro: false
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -23,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
                 ['@token', token],
             ]);
 
-            return {...state, isLoggedIn: true, user };
+            return {...state, isLoggedIn: true, user, loading_login: false };
 
         case t.LOGGED_OUT:
             let keys = ['user'];
@@ -42,6 +44,12 @@ export default (state = INITIAL_STATE, action) => {
 
         case t.MODIFICA_NOME_USUARIO:
             return { ...state, nomeUsuario: action.payload };
+
+        case t.LOGIN_EM_ANDAMENTO:
+            return { ...state, loading_login: true };
+            
+        case t.CADASTRO_EM_ANDAMENTO:
+            return { ...state, loading_cadastro: true };
 
         default:
             return state;

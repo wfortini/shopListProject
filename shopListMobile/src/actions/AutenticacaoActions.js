@@ -142,7 +142,10 @@ export function signInWithFacebook(fbToken) {
 
 export function login(data) {
 
-    return (dispatch) =>{
+    return (dispatch) => {
+        
+        dispatch({ type: t.LOGIN_EM_ANDAMENTO });
+        
         return new Promise((resolve, reject) =>{
             const {email, password} = data;
             auth.signInWithEmailAndPassword(email, password)
