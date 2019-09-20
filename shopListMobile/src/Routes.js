@@ -11,18 +11,8 @@ export default props => (
 
     <Router>        
         <Scene key='root' >
-           <Scene key='formLogin' component={Menu} title="Login" initial hideNavBar={false}
-               titleStyle={{                
-                fontSize: 22,                
-                justifyContent: 'center',
-                marginLeft: 30,
-                alignSelf: 'center',
-                textAlign: 'center',                
-                
-              }}
-           
-           />             
-           <Scene key='formEmail' component={FormEmail}  title='Email' hideNavBar={true} />
+           <Scene key='formLogin' component={Login} title="Login" initial hideNavBar={true} />             
+           <Scene key='Menu' component={Menu}  title='Menu' hideNavBar={true} />
            <Scene key='formDados' component={FormDados}  title='dados' hideNavBar={true} />
            <Scene key='formCadastro' component={FormCadastro}  title='cadastro' hideNavBar={true} />
         </Scene>        

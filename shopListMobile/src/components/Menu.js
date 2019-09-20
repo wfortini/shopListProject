@@ -6,18 +6,42 @@ import { connect } from 'react-redux';
 import { modificaEmail } from '../actions/AutenticacaoActions';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconAnt from 'react-native-vector-icons/AntDesign';
 import { Actions } from 'react-native-router-flux';
 
-const Menu = props => {  
-    
-    state = {
-        data: [
-          { id: "00", name: "Relâmpago McQueen" },
-          { id: "01", name: "Agente Tom Mate" },
-          { id: "02", name: "Doc Hudson" },
-          { id: "03", name: "Cruz Ramirez" }
-        ]
-      };
+const Menu = props => {    
+
+    state = { data:[
+                    { 
+                    id: 1, 
+                    value:  <View style={styles.item}>
+                                    <Icon name='cart-arrow-down' size={90} color='#4169E1' />
+                                    <Text style={styles.text}>Compras</Text>
+                            </View>
+                },
+                { 
+                    id: 2, 
+                    value:  <View style={styles.item}>
+                                <IconAnt name='qrcode' size={90} color='#4169E1' />
+                                <Text style={styles.text}>QrCode</Text>
+                            </View>
+                },
+                { 
+                    id: 3, 
+                    value:  <View style={styles.item}>
+                                <IconAnt name='linechart' size={90} color='#4169E1' />
+                                <Text style={styles.text}>Histórico</Text>
+                            </View>
+                },
+                { 
+                    id: 4, 
+                    value:  <View style={styles.item}>
+                                <IconAnt name='tags' size={90} color='#4169E1' />
+                                <Text style={styles.text}>Tags</Text>
+                            </View>
+                    }
+                ]
+    };
       
 
     // https://medium.com/@oieduardorabelo/react-native-criando-grids-com-flatlist-b4eb64e7dcd5
@@ -31,14 +55,7 @@ const Menu = props => {
             keyExtractor={item => item.id}            
             renderItem={({ item }) => {
                 return (
-                <View style={styles.item}>
-                    <Icon
-                        name='cart-arrow-down'
-                        size={90}
-                        color='#4169E1'
-                      />
-                    <Text style={styles.text}>{item.name}</Text>
-                </View>
+                    item.value
                 );
             }}
             />

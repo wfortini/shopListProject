@@ -82,11 +82,11 @@ export function register(data) {
 }
 
 export function signInWithFacebook(fbToken) {
-    return (dispatch) => {
-        let exists = undefined;
-        let user = undefined;
+    return (dispatch) => {        
         console.log(fbToken);
         return new Promise((resolve, reject) => {
+              let exists = false;
+              let user = undefined;
               const credential = firebase.auth.FacebookAuthProvider.credential(fbToken);
               auth.signInWithCredential(credential)
                    .then((userCredential) => {
@@ -102,7 +102,8 @@ export function signInWithFacebook(fbToken) {
                                 auth.currentUser.getIdToken(/* forceRefresh */ true)
                                 .then((idToken) => {
                                     dispatch({type: t.LOGGED_IN, user : userInstance, idToken});
-                                    resolve(exists, userInstance);                                                                
+                                    console.log(` action ==== ${exists} ${userInstance}`)
+                                    resolve( { exists, userInstance } );                                                                
                                 }).catch((error) => {
                                     console.log(`error get token ${error}`);
                                 });

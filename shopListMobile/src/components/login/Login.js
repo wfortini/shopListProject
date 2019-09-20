@@ -48,7 +48,7 @@ const Login = props => {
 
           props.login(data)
           .then((exists, user) => {
-              if(exists) Actions.home();
+              if(exists) Actions.Menu();
           })         
 
     }
@@ -61,8 +61,10 @@ const Login = props => {
            }else{
                 AccessToken.getCurrentAccessToken().then((data) => {                  
                   props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
-
-                    if(exists) alert("sucesso");
+                       console.log(`==== ${exists} ${user}`)
+                    if(exists){
+                      Actions.Menu();
+                    }
                   });
                 }).catch((error) => console.log(error.message))
            }
