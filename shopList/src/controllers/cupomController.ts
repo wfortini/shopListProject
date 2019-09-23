@@ -6,6 +6,7 @@ import { Cupom } from "../domain/cupom";
 import { HistoricoInstance } from "../models/HistoricoModel";
 import { CupomInstance } from "../models/CupomModel";
 import { ItemCupomInstance } from "../models/ItemCupomModel";
+import { ProdutoInstance } from "../models/ProdutoModel";
 
 export class CupomController {
 
@@ -13,7 +14,8 @@ export class CupomController {
 
         //TODO: verificar se nfce já foi importada
         const nfce = req.body;   
-        const user = req.app.get("user");    
+        const user = req.app.get("user"); 
+        produtos: ProdutoInstance[] = [];   
 
         if(!nfce.value){
             res.status(400).send({message: 'nfce invalido.'});
@@ -64,6 +66,9 @@ export class CupomController {
                                 res.status(400).send(error);
                                 console.log(`======= ${error}`);
                             });
+
+
+                            //TODO: salvar produto aqui
 
                             res.status(200).send( result );
 
