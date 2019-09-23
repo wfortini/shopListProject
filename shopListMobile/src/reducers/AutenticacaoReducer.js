@@ -50,6 +50,8 @@ export default (state = INITIAL_STATE, action) => {
             
         case t.CADASTRO_EM_ANDAMENTO:
             return { ...state, loading_cadastro: true };
+        case t.LOGIN_USUARIO_ERRO:
+            return { ...state, erroLogin: action.payload, loading_login: false };
 
         default:
             return state;

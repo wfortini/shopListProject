@@ -105,6 +105,7 @@ export function signInWithFacebook(fbToken) {
                                     console.log(` action ==== ${exists} ${userInstance}`)
                                     resolve( { exists, userInstance } );                                                                
                                 }).catch((error) => {
+                                    //TODO: tratar erro get Token firebase
                                     console.log(`error get token ${error}`);
                                 });
                            }
@@ -119,6 +120,7 @@ export function signInWithFacebook(fbToken) {
                                             dispatch({type: t.LOGGED_IN, user: result, idToken});
                                             resolve(exists, result);                                                                            
                                         }).catch((error) => {
+                                            //TODO: tratar erro get Token firebase
                                             console.log(`error get token ${error}`);
                                         });
                                     }
@@ -134,7 +136,7 @@ export function signInWithFacebook(fbToken) {
                        });  // fim getUser                   
                         
                    }).catch((error) => { // catch signInWithCredential
-                       console.log(error); 
+                      console.log(error); 
                       reject(error)});
 
         }); // new Promise
@@ -150,7 +152,7 @@ export function login(data) {
         return new Promise((resolve, reject) =>{
             const {email, password} = data;
             auth.signInWithEmailAndPassword(email, password)
-             .then((resp) => {
+             .then((resp) => {              
                 console.log(`response  ${JSON.stringify(resp, null, 4)}`); 
                 let {user} = resp;
                 getUser(user.uid)
@@ -163,11 +165,22 @@ export function login(data) {
                     }
 
                 }).catch((error) => {
-
+                    //TODO: tratar erro getUser API
                 });
-             }).catch((error) => {
+             }).catch((error) => {                
                 var errorCode = error.code;
                 var errorMessage = error.message;
+                if (errorCode === 'auth/invalid-email') {
+                   dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'E-mail inválido.'});                 
+                } else if (errorCode === 'auth/user-disabled') {
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Usuário correspondente ao e-mail fornecido foi desativado.'}); 
+                } else if(errorCode === 'auth/user-not-found'){
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Não há usuário correspondente ao email fornecido.'});
+                } else if(errorCode === 'auth/wrong-password'){
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'A senha é inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'});
+                }else{
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Ocorreu erro ao efetuar login.'});
+                }
              });
         });
     }
@@ -180,3 +193,13 @@ function registerUser(user) {
 function getUser(uid){
     return request.get(`/api/user/${uid}`);
 }
+
+function handleErrorsignInWithCredential(error, dispatch){
+
+}
+
+function handleErrorCurrentUserFirebase(error, dispatch){
+
+}
+
+

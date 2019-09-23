@@ -126,6 +126,9 @@ const Login = props => {
                           }
                         />
                      </View>
+                     <Text style={{ color: '#ff0000', fontSize: 18 }}>
+                            { props.erroLogin }
+                     </Text>
                      <View style={styles.constainerCreater}>
                         <TouchableOpacity onPress={() => Actions.formCadastro() }>
                              <Text style={ [ styles.textLabel, { paddingLeft: 40 } ] }>Criar sua conta</Text>
@@ -158,8 +161,8 @@ const mapStateToProps = state => (
     {
         email: state.AutenticacaoReducer.email,
         password: state.AutenticacaoReducer.senha,
-        loading_login: state.AutenticacaoReducer.loading_login
-
+        loading_login: state.AutenticacaoReducer.loading_login,
+        erroLogin: state.AutenticacaoReducer.erroLogin
     }
 )
 
