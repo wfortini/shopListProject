@@ -65,16 +65,16 @@ export function register(data) {
                       
                     var errorCode = error.code;
                     var errorMessage = error.message;
-                    if (errorCode === 'auth/email-already-in-use') {
-                      alert('Email já em uso.');
+                    if (errorCode === 'auth/email-already-in-use') {                       
+                       dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Email já em uso.'} );
                     } else if (errorCode === 'auth/invalid-email') {
-                         alert('Email invalido.');
-                    } else if(errorCode === 'auth/operation-not-allowed'){
-                        alert('Operação não permitida, habilite funcionalidade no FireBase');
-                    } else if(errorCode === 'auth/weak-password'){
-                        alert('Password muito fraco.');
+                        dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Email inválido.'} )                         
+                    } else if(errorCode === 'auth/operation-not-allowed') {
+                       dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Operação não permitida, habilite funcionalidade no FireBase' } );                       
+                    } else if(errorCode === 'auth/weak-password') {
+                        dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Password muito fraco'} );                        
                     }else{
-                        alert('Ocorreu um erro durante criação do usuario');
+                        dispach( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Ocorreu um erro durante criação do usuario' } );
                     }
                 });
         })
@@ -136,6 +136,7 @@ export function signInWithFacebook(fbToken) {
                        });  // fim getUser                   
                         
                    }).catch((error) => { // catch signInWithCredential
+                      handleErrorsignInWithCredential(error, dispatch);
                       console.log(error); 
                       reject(error)});
 
@@ -196,6 +197,28 @@ function getUser(uid){
 
 function handleErrorsignInWithCredential(error, dispatch){
 
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    if ( errorCode === 'auth/account-exists-with-different-credential' ) {
+         dispatch( {type: t.LOGIN_USUARIO_ERRO, errorCode: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
+    } else if( errorCode === 'auth/invalid-credential' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Credencial malformatada ou expirada.'} );
+    } else if ( errorCode === 'auth/operation-not-allowed' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Tipo de conta correspondente à credencial não está ativado.'} );
+
+    }  else if ( errorCode === 'auth/user-disabled' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Usuário desabilitado.'} );
+    }  else if ( errorCode === 'auth/user-not-found' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Não há usuário para o email fornecido.'} );
+    } else if ( errorCode === 'auth/wrong-password' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Senha inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'} );
+    } else if ( errorCode === 'auth/invalid-verification-code' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Código de verificação da credencial inválido.'} );
+    } else if ( errorCode === 'auth/invalid-verification-id' ){
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'ID de verificação da credencial inválido.'} );
+    } else [
+        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Ocorreu um erro durante atenticação do usuário.'} ); 
+    ]
 }
 
 function handleErrorCurrentUserFirebase(error, dispatch){

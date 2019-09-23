@@ -9,7 +9,9 @@ const INITIAL_STATE = {
     isLoggedIn: false, 
     user: null,
     loading_login: false,
-    loading_cadastro: false
+    loading_cadastro: false,
+    errorLogin: '',
+    errorCadastro: ''
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -50,8 +52,12 @@ export default (state = INITIAL_STATE, action) => {
             
         case t.CADASTRO_EM_ANDAMENTO:
             return { ...state, loading_cadastro: true };
+
         case t.LOGIN_USUARIO_ERRO:
-            return { ...state, erroLogin: action.payload, loading_login: false };
+            return { ...state, errorLogin: action.payload, loading_login: false };
+        
+        case t.CADASTRO_USUARIO_ERRO:
+            return { ...state, errorCadastro: action.payload, loading_cadastro: false};
 
         default:
             return state;
