@@ -1,4 +1,4 @@
-export class ProdutoAttributes{
+export class Produto {
 
     id: number;
     ean: string;

@@ -1,3 +1,4 @@
+import { Produto } from './../domain/Produto';
 import { NextFunction, Request, Response } from "express";
 import db from '../models';
 import { Transaction } from "sequelize";
@@ -6,7 +7,7 @@ import { Cupom } from "../domain/cupom";
 import { HistoricoInstance } from "../models/HistoricoModel";
 import { CupomInstance } from "../models/CupomModel";
 import { ItemCupomInstance } from "../models/ItemCupomModel";
-import { ProdutoInstance } from "../models/ProdutoModel";
+
 
 export class CupomController {
 
@@ -15,14 +16,15 @@ export class CupomController {
         //TODO: verificar se nfce já foi importada
         const nfce = req.body;   
         const user = req.app.get("user"); 
-        produtos: ProdutoInstance[] = [];   
+        let produtos: Produto[] = []; 
+        let result: Cupom;  
 
         if(!nfce.value){
             res.status(400).send({message: 'nfce invalido.'});
         }
 
         const scraping = new Scraping();        
-        const result = await  scraping.scrapCupom(nfce.value)
+        result = await  scraping.scrapCupom(nfce.value)
                             .then((cupom: any) => {
 
                                 if(cupom.itensCupom == null || cupom.itensCupom.length == 0){
@@ -68,7 +70,29 @@ export class CupomController {
                             });
 
 
+                            result.itensCupom.forEach(item => {
+                                var produto = new Produto();
+                                produto.CNPJ = result.CNPJ;
+                                produto.bairro = result.bairro;
+                                produto.cep = result.cep;
+                                produto.cidade = result.cidade;
+                                produto.desc_1 = item.descricao;
+                                produto.ean = 'xxxxxxxx';
+                                produto.endereco = result.endereco;
+                                produto.estado = result.estado;
+                                produto.nomeFantasia = 'teste';
+                                produto.razaoSocial = result.razaoSocial;
+                                produto.ultimoValor = 0;
+                                produto.valor = item.valorUnitario;
+                                
+                                produtos.push( produto );
+
+                            });
+
                             //TODO: salvar produto aqui
+                            db.sequelize.transaction((t: Transaction) => {
+                                return db.Produto.create(user, {transaction: t});
+                            });                            
 
                             res.status(200).send( result );
 
