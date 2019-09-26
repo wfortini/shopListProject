@@ -216,9 +216,9 @@ function handleErrorsignInWithCredential(error, dispatch){
         dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Código de verificação da credencial inválido.'} );
     } else if ( errorCode === 'auth/invalid-verification-id' ){
         dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'ID de verificação da credencial inválido.'} );
-    } else [
+    } else {
         dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Ocorreu um erro durante atenticação do usuário.'} ); 
-    ]
+    }
 }
 
 function handleErrorCurrentUserFirebase(error, dispatch){
