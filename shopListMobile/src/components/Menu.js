@@ -8,6 +8,7 @@ import { modificaEmail } from '../actions/AutenticacaoActions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import { Actions } from 'react-native-router-flux';
+import { Header } from 'react-native-elements';
 
 const Menu = props => {    
 
@@ -46,8 +47,16 @@ const Menu = props => {
 
     // https://medium.com/@oieduardorabelo/react-native-criando-grids-com-flatlist-b4eb64e7dcd5
     return (
+
+        
           
         <SafeAreaView>
+            <Header  centerComponent={{ text: 'Menu', style: { color: '#fff' } }}
+            containerStyle={{
+                backgroundColor: '#3D6DCC',
+                justifyContent: 'space-around',
+                height: 50
+            }}  />
             <FlatList
             data={this.state.data}
             numColumns={2}

@@ -83,7 +83,9 @@ export function register(data) {
 
 export function signInWithFacebook(fbToken) {
     return (dispatch) => {        
-        console.log(fbToken);
+        
+        dispatch({ type: t.LOGIN_SOCIAL_EM_ANDAMENTO });
+
         return new Promise((resolve, reject) => {
               let exists = false;
               let user = undefined;
@@ -200,24 +202,24 @@ function handleErrorsignInWithCredential(error, dispatch){
     var errorCode = error.code;
     var errorMessage = error.message;
     if ( errorCode === 'auth/account-exists-with-different-credential' ) {
-         dispatch( {type: t.LOGIN_USUARIO_ERRO, errorCode: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
+         dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorCode: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
     } else if( errorCode === 'auth/invalid-credential' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Credencial malformatada ou expirada.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Credencial malformatada ou expirada.'} );
     } else if ( errorCode === 'auth/operation-not-allowed' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Tipo de conta correspondente à credencial não está ativado.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Tipo de conta correspondente à credencial não está ativado.'} );
 
     }  else if ( errorCode === 'auth/user-disabled' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Usuário desabilitado.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Usuário desabilitado.'} );
     }  else if ( errorCode === 'auth/user-not-found' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Não há usuário para o email fornecido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Não há usuário para o email fornecido.'} );
     } else if ( errorCode === 'auth/wrong-password' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Senha inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Senha inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'} );
     } else if ( errorCode === 'auth/invalid-verification-code' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Código de verificação da credencial inválido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Código de verificação da credencial inválido.'} );
     } else if ( errorCode === 'auth/invalid-verification-id' ){
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'ID de verificação da credencial inválido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'ID de verificação da credencial inválido.'} );
     } else {
-        dispatch( {type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Ocorreu um erro durante atenticação do usuário.'} ); 
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Ocorreu um erro durante atenticação do usuário.'} ); 
     }
 }
 

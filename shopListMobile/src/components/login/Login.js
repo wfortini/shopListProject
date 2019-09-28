@@ -25,10 +25,10 @@ import bgSrc from '../../images/Blue-watercolor-wet-background-vector-03.jpg';
 
 import { Actions } from 'react-native-router-flux';
 
-const Login = props => { 
+class  Login extends Component { 
   
      onRenderBtnAcessar = ()  => {
-           if( props.loading_login ){
+           if( this.props.loading_login ){
              return (
                   <ActivityIndicator size="large" />
              )
@@ -39,6 +39,18 @@ const Login = props => {
            )
            
      }
+
+     onRenderBtnSocial = ()  => {
+      if( this.props.loading_social ){
+        return (
+             <ActivityIndicator size="large" />
+        )
+      }
+      return  (
+             <SocialIcon  type='facebook' onPress={this.onSubmit} />
+      )
+      
+    }
 
     onLogin = () => {          
           const data = {
@@ -60,7 +72,7 @@ const Login = props => {
              alert("Cancelado");
            }else{
                 AccessToken.getCurrentAccessToken().then((data) => {                  
-                  props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
+                  this.props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
                        console.log(`==== ${exists} ${user}`)
                     if(exists){
                       Actions.Menu();
@@ -72,89 +84,87 @@ const Login = props => {
 
     }
 
-    
-    return (
-              <View style={styles.container} >       
+    render() {
+          return (
+                    <View style={styles.container} >       
 
-                  <View style={styles.constainerHeader}>
-                      <Icon
-                        name='cart-arrow-down'
-                        size={90}
-                        color='#4169E1'
-                      />
-                      <Text>ShopList</Text>
-                  </View>
-          
-            
-                 <View  style={[styles.containerInput]}>
-                                   
-                    <Input  placeholder="Usuário"
-                            autoCorrect={false}
-                            autoCapitalize={'none'}
-                            returnKeyType={'none'}
-                            value={props.email}                    
-                            onChangeText={texto => props.modificaEmail(texto) }
-                            inputStyle={ {fontSize: 16, paddingLeft: 10 } }
-                            containerStyle={ styles.input } 
-                            underlineColorAndroid='transparent'
-                            leftIcon={
-                              <Icon
-                                name='user'
-                                size={20}
-                                color='#4169E1'
-                              />
-                            }
-                    />
-                    </View>
-                    <View  style={[styles.containerInput]}>              
-                     <Input placeholder={"Password"}
-                            secureTextEntry={true}
-                            autoCorrect={false}
-                            autoCapitalize={'none'}
-                            returnKeyType={'done'}
-                            value={props.senha}                        
-                            underlineColorAndroid="transparent"
-                            onChangeText={texto => props.modificaSenha(texto) }
-                            inputStyle={ {fontSize: 16, paddingLeft: 10 } }                            
-                            containerStyle={ styles.input } 
-                            leftIcon={
+                        <View style={styles.constainerHeader}>
                             <Icon
-                              name='lock'
-                              size={20}
+                              name='cart-arrow-down'
+                              size={90}
                               color='#4169E1'
                             />
-                          }
-                        />
-                     </View>
-                     <Text style={{ color: '#ff0000', fontSize: 18 }}>
-                            { props.erroLogin }
-                     </Text>
-                     <View style={styles.constainerCreater}>
-                        <TouchableOpacity onPress={() => Actions.formCadastro() }>
-                             <Text style={ [ styles.textLabel, { paddingLeft: 40 } ] }>Criar sua conta</Text>
-                        </TouchableOpacity >
-                        <TouchableOpacity >
-                            <Text style={ [ styles.textLabel, { paddingRight : 55 } ] }>Esqueceu sua senha?</Text>
-                      </TouchableOpacity >
-                  </View>           
+                            <Text>ShopList</Text>
+                        </View>
+                
                   
-                 <View style={styles.constainerButton} > 
-                    { this.onRenderBtnAcessar() }
-                 </View> 
-                 <View style={ {flex: 2, alignContent: 'center'} } >
-                    <View style={ styles.containerSocial }>       
-                        <Text style={ {padding: 20, fontSize: 16} }  >Entrar com login social?</Text>
-
-                        <SocialIcon  type='facebook' onPress={this.onSubmit} />
-                    </View>
-                    
-                 </View>
-             </View>        
-       
-    );
-
-    
-
+                      <View  style={[styles.containerInput]}>
+                                        
+                          <Input  placeholder="Usuário"
+                                  autoCorrect={false}
+                                  autoCapitalize={'none'}
+                                  returnKeyType={'none'}
+                                  value={ this.props.email }                    
+                                  onChangeText={texto => this.props.modificaEmail(texto) }
+                                  inputStyle={ {fontSize: 16, paddingLeft: 10 } }
+                                  containerStyle={ styles.input } 
+                                  underlineColorAndroid='transparent'
+                                  leftIcon={
+                                    <Icon
+                                      name='user'
+                                      size={20}
+                                      color='#4169E1'
+                                    />
+                                  }
+                          />
+                          </View>
+                          <View  style={[styles.containerInput]}>              
+                          <Input placeholder={"Password"}
+                                  secureTextEntry={true}
+                                  autoCorrect={false}
+                                  autoCapitalize={'none'}
+                                  returnKeyType={'done'}
+                                  value={ this.props.password }                        
+                                  underlineColorAndroid="transparent"
+                                  onChangeText={texto => this.props.modificaSenha(texto) }
+                                  inputStyle={ {fontSize: 16, paddingLeft: 10 } }                            
+                                  containerStyle={ styles.input } 
+                                  leftIcon={
+                                  <Icon
+                                    name='lock'
+                                    size={20}
+                                    color='#4169E1'
+                                  />
+                                }
+                              />
+                          </View>
+                          <Text style={{ color: '#ff0000'}}>
+                                  { this.props.errorLogin }
+                          </Text>
+                          <View style={styles.constainerCreater}>
+                              <TouchableOpacity onPress={() => Actions.formCadastro() }>
+                                  <Text style={ [ styles.textLabel, { paddingLeft: 40 } ] }>Criar sua conta</Text>
+                              </TouchableOpacity >
+                              <TouchableOpacity >
+                                  <Text style={ [ styles.textLabel, { paddingRight : 55 } ] }>Esqueceu sua senha?</Text>
+                            </TouchableOpacity >
+                        </View>           
+                        
+                      <View style={styles.constainerButton} > 
+                          { this.onRenderBtnAcessar() }
+                      </View> 
+                      <View style={ {flex: 2, alignContent: 'center'} } >
+                          <View style={ styles.containerSocial }>       
+                              <Text style={ {padding: 20, fontSize: 16} }  >Entrar com login social?</Text>
+                                  { this.onRenderBtnSocial() }
+                              
+                          </View>
+                          
+                      </View>
+                  </View>        
+            
+          );
+      }
 }
 
 const mapStateToProps = state => (
@@ -162,7 +172,8 @@ const mapStateToProps = state => (
         email: state.AutenticacaoReducer.email,
         password: state.AutenticacaoReducer.senha,
         loading_login: state.AutenticacaoReducer.loading_login,
-        erroLogin: state.AutenticacaoReducer.erroLogin
+        errorLogin: state.AutenticacaoReducer.errorLogin,
+        loading_social: state.AutenticacaoReducer.loading_social
     }
 )
 
@@ -212,8 +223,7 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH - 40,
     height: 50,    
     borderRadius: 20,
-    borderWidth: 1,
-    fontSize: 16,
+    borderWidth: 1,   
     borderColor: '#4169E1',    
 
   },
