@@ -16,11 +16,19 @@ class CupomController {
             //TODO: verificar se nfce já foi importada
             const nfce = req.body;
             const user = req.app.get("user");
+            let produtos = [];
+            let result;
             if (!nfce.value) {
                 res.status(400).send({ message: 'nfce invalido.' });
             }
+            //const cupomExists : CupomAttributes  = await db.Cupom.find({ where: {
+            //                                                     nfce:nfce.value
+            //                                         }});
+            // if ( cupomExists !== null){
+            //     res.status(400).send({ message : 'Cupom já carregado.'});
+            // }
             const scraping = new scrap_service_1.Scraping();
-            const result = yield scraping.scrapCupom(nfce.value)
+            result = yield scraping.scrapCupom(nfce.value)
                 .then((cupom) => {
                 if (cupom.itensCupom == null || cupom.itensCupom.length == 0) {
                     throw new Error(`Cupom not found!`);
@@ -53,6 +61,28 @@ class CupomController {
             }).catch((error) => {
                 res.status(400).send(error);
                 console.log(`======= ${error}`);
+            });
+            result.itensCupom.forEach(item => {
+                var produto = {
+                    CNPJ: result.CNPJ,
+                    bairro: result.bairro,
+                    codigo: item.codigo,
+                    cep: result.cep,
+                    cidade: result.cidade,
+                    desc_1: item.descricao,
+                    ean: 'xxxxxxxx11111',
+                    endereco: result.endereco,
+                    estado: result.estado,
+                    nomeFantasia: 'teste',
+                    razaoSocial: result.razaoSocial,
+                    ultimoValor: 0,
+                    valor: item.valorUnitario
+                };
+                produtos.push(produto);
+            });
+            //TODO: salvar produto   aqui
+            models_1.default.sequelize.transaction((t) => {
+                return models_1.default.Produto.bulkCreate(produtos, { transaction: t });
             });
             res.status(200).send(result);
         });

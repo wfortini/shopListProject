@@ -5,7 +5,12 @@ exports.default = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.BIGINT,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
+        },
+        codigo: {
+            type: DataTypes.STRING(128),
+            allowNull: false
         },
         ean: {
             type: DataTypes.STRING,

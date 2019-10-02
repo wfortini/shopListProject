@@ -6,11 +6,12 @@ export interface ProdutoAttributes{
     id?: number;
     ean: string;
     desc_1: string;
-    desc_2: string;
-    desc_3: string;
+    desc_2?: string;
+    desc_3?: string;
+    codigo?: string;
     valor: number;
-    image: string;
-    dataUpdate: string;
+    image?: string;
+    dataUpdate?: string;
     ultimoValor: number;
     
     nomeFantasia: string;
@@ -36,7 +37,12 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
                id:{
                   type: DataTypes.BIGINT,
                   allowNull: false,
-                  primaryKey: true
+                  primaryKey: true,
+                  autoIncrement: true
+               },
+               codigo:{
+                    type: DataTypes.STRING(128),
+                    allowNull: false
                },
                ean:{
                    type: DataTypes.STRING,
