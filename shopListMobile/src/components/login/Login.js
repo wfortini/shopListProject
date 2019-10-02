@@ -6,7 +6,7 @@ const { LoginManager, AccessToken } = FBSDK;
 
 import Dimensions from 'Dimensions';
 
-import {  StyleSheet,  TouchableOpacity,  Text,  Animated,  Easing,  Image,  Alert,  View,
+import {  StyleSheet,  TouchableOpacity,  Text,  ActivityIndicator,  Easing,  Image,  Alert,  View,
   ImageBackground, KeyboardAvoidingView, TextInput,  } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -15,7 +15,8 @@ import { modificaEmail, modificaSenha, signInWithFacebook, login } from '../../a
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
-import { SocialIcon, Divider} from 'react-native-elements';
+import { SocialIcon, Button, Input } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import usernameImg from '../../images/username.png';
 import passwordImg from '../../images/password.png';
@@ -24,22 +25,34 @@ import bgSrc from '../../images/Blue-watercolor-wet-background-vector-03.jpg';
 
 import { Actions } from 'react-native-router-flux';
 
-const Login = props => {
+class  Login extends Component { 
+  
+     onRenderBtnAcessar = ()  => {
+           if( this.props.loading_login ){
+             return (
+                  <ActivityIndicator size="large" />
+             )
+           }
+           return  (
+                     <Button buttonStyle={styles.button} type="outline" title="Entrar"
+                          onPress={ this.onLogin }  /> 
+           )
+           
+     }
 
-    const buttonAnimated = new Animated.Value(0);
-    const growAnimated = new Animated.Value(0);
+     onRenderBtnSocial = ()  => {
+      if( this.props.loading_social ){
+        return (
+             <ActivityIndicator size="large" />
+        )
+      }
+      return  (
+             <SocialIcon  type='facebook' onPress={this.onSubmit} />
+      )
+      
+    }
 
-    const changeWidth = buttonAnimated.interpolate({
-      inputRange: [0, 1],
-      outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
-    });
-    const changeScale = growAnimated.interpolate({
-      inputRange: [0, 1],
-      outputRange: [1, MARGIN],
-    });
-
-    onLogin = () => {
-          
+    onLogin = () => {          
           const data = {
               email: props.email,
               password: props.senha
@@ -47,9 +60,8 @@ const Login = props => {
 
           props.login(data)
           .then((exists, user) => {
-              if(exists) Actions.home();
-          })
-             
+              if(exists) Actions.Menu();
+          })         
 
     }
 
@@ -60,94 +72,108 @@ const Login = props => {
              alert("Cancelado");
            }else{
                 AccessToken.getCurrentAccessToken().then((data) => {                  
-                  props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
-
-                    if(exists) alert("sucesso");
+                  this.props.signInWithFacebook(data.accessToken).then(({exists, user}) => {
+                       console.log(`==== ${exists} ${user}`)
+                    if(exists){
+                      Actions.Menu();
+                    }
                   });
                 }).catch((error) => console.log(error.message))
            }
-
-
       })
 
     }
 
-    return (
+    render() {
+          return (
+                    <View style={styles.container} >       
 
-      <ImageBackground style={styles.picture} source={bgSrc}>
-
-          <View style={styles.containerTitle}>
-                <Text style={styles.text}>Vitriny</Text>
-          </View>
-          
-             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                 <View  style={styles.inputWrapper} >
-                    <Image source={usernameImg} style={styles.inlineImg} />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Usuário"
-                      autoCorrect={false}
-                      autoCapitalize={'none'}
-                      returnKeyType={'none'}
-                      value={props.email}
-                      placeholderTextColor="white"
-                      underlineColorAndroid="transparent"
-                      onChangeText={texto => props.modificaEmail(texto) }
-                    />
-                </View>
-                <View style={styles.inputWrapper} >
-                      <Image source={passwordImg} style={styles.inlineImg} />
-                      <TextInput
-                        style={styles.input}
-                        placeholder={"Password"}
-                        secureTextEntry={true}
-                        autoCorrect={false}
-                        autoCapitalize={'none'}
-                        returnKeyType={'done'}
-                        value={props.senha}
-                        placeholderTextColor="white"
-                        underlineColorAndroid="transparent"
-                        onChangeText={texto => props.modificaSenha(texto) }
-                      />
-                  </View>
-              </KeyboardAvoidingView>
-                  <View style={styles.containerSign}>
-                        <TouchableOpacity onPress={() => Actions.formCadastro() }>
-                             <Text style={styles.textLabel}>Criar sua conta</Text>
-                        </TouchableOpacity >
-                        <TouchableOpacity >
-                            <Text style={styles.textLabel}>Esqueceu sua senha?</Text>
-                      </TouchableOpacity >
-                  </View>
-                 <View style={styles.containerButton}>
-                   <Animated.View style={{width: changeWidth}}>
-                        <TouchableOpacity
-                          style={styles.button}
-                          activeOpacity={1}>
-                          {props.isLoading ? (
-                            <Image source={spinner} style={styles.image} />
-                          ) : (
-                            <Text style={styles.textEnter}>ENTRAR</Text>
-                          )}
-                        </TouchableOpacity>
-                         <Animated.View
-                            style={[styles.circle, {transform: [{scale: changeScale}]}]}
+                        <View style={styles.constainerHeader}>
+                            <Icon
+                              name='cart-arrow-down'
+                              size={90}
+                              color='#4169E1'
+                            />
+                            <Text>ShopList</Text>
+                        </View>
+                
+                  
+                      <View  style={[styles.containerInput]}>
+                                        
+                          <Input  placeholder="Usuário"
+                                  autoCorrect={false}
+                                  autoCapitalize={'none'}
+                                  returnKeyType={'none'}
+                                  value={ this.props.email }                    
+                                  onChangeText={texto => this.props.modificaEmail(texto) }
+                                  inputStyle={ {fontSize: 16, paddingLeft: 10 } }
+                                  containerStyle={ styles.input } 
+                                  underlineColorAndroid='transparent'
+                                  leftIcon={
+                                    <Icon
+                                      name='user'
+                                      size={20}
+                                      color='#4169E1'
+                                    />
+                                  }
                           />
-                    </Animated.View>
-                 </View> 
-                 <TouchableOpacity onPress={this.onSubmit }>
-                      <SocialIcon title='Entrar com Facebook!!!!!' button type='facebook'/> 
-                 </TouchableOpacity >
+                          </View>
+                          <View  style={[styles.containerInput]}>              
+                          <Input placeholder={"Password"}
+                                  secureTextEntry={true}
+                                  autoCorrect={false}
+                                  autoCapitalize={'none'}
+                                  returnKeyType={'done'}
+                                  value={ this.props.password }                        
+                                  underlineColorAndroid="transparent"
+                                  onChangeText={texto => this.props.modificaSenha(texto) }
+                                  inputStyle={ {fontSize: 16, paddingLeft: 10 } }                            
+                                  containerStyle={ styles.input } 
+                                  leftIcon={
+                                  <Icon
+                                    name='lock'
+                                    size={20}
+                                    color='#4169E1'
+                                  />
+                                }
+                              />
+                          </View>
+                          <Text style={{ color: '#ff0000'}}>
+                                  { this.props.errorLogin }
+                          </Text>
+                          <View style={styles.constainerCreater}>
+                              <TouchableOpacity onPress={() => Actions.formCadastro() }>
+                                  <Text style={ [ styles.textLabel, { paddingLeft: 40 } ] }>Criar sua conta</Text>
+                              </TouchableOpacity >
+                              <TouchableOpacity >
+                                  <Text style={ [ styles.textLabel, { paddingRight : 55 } ] }>Esqueceu sua senha?</Text>
+                            </TouchableOpacity >
+                        </View>           
+                        
+                      <View style={styles.constainerButton} > 
+                          { this.onRenderBtnAcessar() }
+                      </View> 
+                      <View style={ {flex: 2, alignContent: 'center'} } >
+                          <View style={ styles.containerSocial }>       
+                              <Text style={ {padding: 20, fontSize: 16} }  >Entrar com login social?</Text>
+                                  { this.onRenderBtnSocial() }
+                              
+                          </View>
                           
-       </ImageBackground>
-    );
-
+                      </View>
+                  </View>        
+            
+          );
+      }
 }
 
 const mapStateToProps = state => (
     {
         email: state.AutenticacaoReducer.email,
-        password: state.AutenticacaoReducer.senha
+        password: state.AutenticacaoReducer.senha,
+        loading_login: state.AutenticacaoReducer.loading_login,
+        errorLogin: state.AutenticacaoReducer.errorLogin,
+        loading_social: state.AutenticacaoReducer.loading_social
     }
 )
 
@@ -158,92 +184,33 @@ export default connect(mapStateToProps, { modificaEmail,
 
 
 const styles = StyleSheet.create({
-  picture: {
+  container:{
     flex: 1,
-    width: undefined,
-    height: undefined,
-    backgroundColor:'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-
+    //backgroundColor: '#2EFEF7'
   },
-  container: {
-    flex: 1,   
-    alignItems: 'center',
-  },
-  containerTitle: {
-    flex: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerInput: {
-
-  },
-  image: {
-    width: 80,
-    height: 80,
-  },
-  text: {
-    color: 'white',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 20,
-    fontSize: 30,
-    fontFamily: "Roboto",
-  },
-  textLabel: {
-    color: 'white',
-    backgroundColor: 'transparent',
-    fontSize: 16,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F035E0',
-    height: MARGIN,
-    borderRadius: 20,
-    zIndex: 100,
-
-  },
-  containerButton: {
+  containerInput:{
     flex: 1,
-    top: -90,
+    //backgroundColor: '#0431B4', 
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',  
   },
-  circle: {
-    height: MARGIN,
-    width: MARGIN,
-    marginTop: -MARGIN,
-    borderWidth: 1,
-    borderColor: '#F035E0',
-    borderRadius: 100,
-    alignSelf: 'center',
-    zIndex: 99,
-    backgroundColor: '#F035E0',
+  constainerHeader:{
+    flex:3,
+   // backgroundColor: '#FF0040',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  textEnter: {
-    color: 'white',
-    backgroundColor: 'transparent',
+  constainerButton:{
+    flex: 1,    
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  image: {
-    width: 24,
-    height: 24,
+  constainerCreater:{
+    flex: 1,
+    flexDirection: 'row',
+      
   },
-  input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    width: DEVICE_WIDTH - 40,
-    height: 40,
-    marginHorizontal: 20,
-    paddingLeft: 45,
-    borderRadius: 20,
-    color: '#ffffff',
-    fontSize: 16,
 
-  },
-  inputWrapper: {
-     flex: 1,
-  },
   inlineImg: {
     position: 'absolute',
     zIndex: 99,
@@ -252,11 +219,35 @@ const styles = StyleSheet.create({
     left: 35,
     top: 9,
   },
-  containerSign: {
-    flex: 1,
-    top: 50,
-    width: DEVICE_WIDTH,
-    flexDirection: 'row',
-    justifyContent: 'space-around',    
+  input: {
+    width: DEVICE_WIDTH - 40,
+    height: 50,    
+    borderRadius: 20,
+    borderWidth: 1,   
+    borderColor: '#4169E1',    
+
   },
+  textLabel: {    
+    backgroundColor: 'transparent',
+    fontSize: 16,
+    paddingLeft: 30,
+    paddingTop: 10
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',    
+    height: 50,
+    borderRadius: 20,    
+    width: DEVICE_WIDTH - 40,
+
+  },
+  containerSocial:{
+    flex: 1,
+    justifyContent: 'center',  
+    alignItems: 'center'
+    
+  }
+
+
+
 });
