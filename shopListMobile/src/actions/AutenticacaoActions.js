@@ -132,7 +132,8 @@ export function signInWithFacebook(fbToken) {
                                     console.log(`Erro http response ${error.response}`);
                                 });
                            }else{
-                               console.log(`result ${JSON.stringify(error, null, 4)}`); 
+                              dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Fallha ao obter usuário.'} )
+                              console.log(`result ${JSON.stringify(error, null, 4)}`); 
                            }
                           
                        });  // fim getUser                   
@@ -202,7 +203,7 @@ function handleErrorsignInWithCredential(error, dispatch){
     var errorCode = error.code;
     var errorMessage = error.message;
     if ( errorCode === 'auth/account-exists-with-different-credential' ) {
-         dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorCode: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
+         dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
     } else if( errorCode === 'auth/invalid-credential' ){
         dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Credencial malformatada ou expirada.'} );
     } else if ( errorCode === 'auth/operation-not-allowed' ){
