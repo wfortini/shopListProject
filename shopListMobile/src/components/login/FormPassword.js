@@ -24,7 +24,7 @@ class  FormPassword extends Component {
                 password: props.senha
             };
 
-            props.login(data)
+            this.props.login(data)
             .then((exists, user) => {
                 if(exists) Actions.Menu();
             })         
@@ -36,8 +36,9 @@ class  FormPassword extends Component {
             <View style={styles.container} >       
 
                 <View style={styles.constainerHeader}>                            
-                    <Text style={{  fontSize: 20, paddingRight: 30 }}>Bem vindo (a) de volta!</Text>
-                    <Text style={{  fontSize: 16 }}>Dígite seu email para fazer login.</Text>
+                    <Text style={{  fontSize: 20, paddingRight: 30 }}>Quase pronto!</Text>
+                    <Text style={{  fontSize: 16 }}>Dígite sua senha para fazer login com</Text>
+                    <Text style={{  fontSize: 16 }}>{ this.props.email }</Text>
                 </View>                      
                 <View  style={[styles.containerInput]}>  
                     
@@ -59,14 +60,27 @@ class  FormPassword extends Component {
                             />
                         }
                         />
-                        <View style={ {flex: 2, alignItems: 'flex-end', paddingLeft: DEVICE_WIDTH - 140 } } >
-                            <Button  buttonStyle={styles.buttonEnter} onPress={() => Actions.formPassword() }
+                        <View style={ {flex: 1, alignItems: 'flex-end', paddingLeft: DEVICE_WIDTH - 140 } } >
+                            <Button  buttonStyle={styles.buttonEnter} onPress={() => this.onLogin() }
                                         icon={ <IconAnt name="arrow-right" size={20}
                                                 color="white" />
                                             }
-                                            title="Próximo"
+                                            title="Entrar"
                                             />
+                           
                     
+                     </View>
+                     <View style={ { flex: 1, justifyContent: 'flex-start',  alignItems: 'flex-start' } }>
+                        
+                        <TouchableOpacity onPress={() => Actions.formCadastro() }>
+                                  <Text style={ [ styles.label, ] }>
+                                      Esqueceu sua senha ?
+                                  </Text>
+                         </TouchableOpacity >
+                    </View>
+                    <View style={ { flex: 1, alignItems: 'center', width: DEVICE_WIDTH - 60, } }>
+                      <Text>Ao clicar em "Entrar", você concorda com
+                      nosos Termos de uso e nossa Política de privacidade.</Text>
                     </View>
                     </View>
 
@@ -145,7 +159,9 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH - 20,
     height: 55, 
   },
-
+  textTerm:{
+    width: DEVICE_WIDTH - 20,
+  }
 
 
 });
