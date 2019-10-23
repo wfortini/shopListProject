@@ -55,6 +55,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, loading_social: true };
             
         case t.CADASTRO_EM_ANDAMENTO:
+            console.log('=======', state);
             return { ...state, loading_cadastro: true };
 
         case t.LOGIN_USUARIO_ERRO:

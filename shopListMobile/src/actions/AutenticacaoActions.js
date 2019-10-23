@@ -38,6 +38,7 @@ export const modificaNomeUsuario = (texto) => {
 //Register the user using email and password
 export function register(data) {
     return (dispatch) => {
+        dispatch({ type: t.CADASTRO_EM_ANDAMENTO });
         return new Promise((resolve, reject) => {
             const {email, password, username} = data;
             auth.createUserWithEmailAndPassword(email, password)
@@ -61,31 +62,30 @@ export function register(data) {
                           console.log(`Erro http response ${error.response}`);
                     });                    
                     
-                }).catch((error) => { // catch  createUserWithEmailAndPassword
-                      
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    if (errorCode === 'auth/email-already-in-use') {                       
-                       dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Email já em uso.'} );
-                    } else if (errorCode === 'auth/invalid-email') {
-                        dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Email inválido.'} )                         
-                    } else if(errorCode === 'auth/operation-not-allowed') {
-                       dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Operação não permitida, habilite funcionalidade no FireBase' } );                       
-                    } else if(errorCode === 'auth/weak-password') {
-                        dispatch( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Password muito fraco'} );                        
-                    }else{
-                        dispach( {type: t.CADASTRO_USUARIO_ERRO, errorCadastro: 'Ocorreu um erro durante criação do usuario' } );
-                    }
-                });
+                }).catch(error => cadastroUsuarioErro(error, dispatch));
         })
     };
 }
 
-export function signInWithFacebook(fbToken) {
-    return (dispatch) => {        
-        
-        dispatch({ type: t.LOGIN_SOCIAL_EM_ANDAMENTO });
+const cadastroUsuarioErro = (error, dispatch) => {    
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    if (errorCode === 'auth/email-already-in-use') {                       
+        dispatch( {type: t.CADASTRO_USUARIO_ERRO, payload: 'Email já em uso.'} );
+    } else if (errorCode === 'auth/invalid-email') {
+        dispatch( {type: t.CADASTRO_USUARIO_ERRO, payload: 'Email inválido.'} )                         
+    } else if(errorCode === 'auth/operation-not-allowed') {
+        dispatch( {type: t.CADASTRO_USUARIO_ERRO, payload: 'Operação não permitida, habilite funcionalidade no FireBase' } );                       
+    } else if(errorCode === 'auth/weak-password') {
+        dispatch( {type: t.CADASTRO_USUARIO_ERRO, payload: 'Password muito fraco'} );                        
+    }else{
+        dispach( {type: t.CADASTRO_USUARIO_ERRO, payload: 'Ocorreu um erro durante criação do usuario' } );
+    }     
+}
 
+export function signInWithFacebook(fbToken) {
+    return (dispatch) => {
+        dispatch({ type: t.LOGIN_SOCIAL_EM_ANDAMENTO });
         return new Promise((resolve, reject) => {
               let exists = false;
               let user = undefined;
@@ -175,13 +175,13 @@ export function login(data) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 if (errorCode === 'auth/invalid-email') {
-                   dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'E-mail inválido.'});                 
+                   dispatch({ type: t.LOGIN_USUARIO_ERRO, payload: 'E-mail inválido.'});                 
                 } else if (errorCode === 'auth/user-disabled') {
-                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Usuário correspondente ao e-mail fornecido foi desativado.'}); 
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, payload: 'Usuário correspondente ao e-mail fornecido foi desativado.'}); 
                 } else if(errorCode === 'auth/user-not-found'){
-                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Não há usuário correspondente ao email fornecido.'});
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, payload: 'Não há usuário correspondente ao email fornecido.'});
                 } else if(errorCode === 'auth/wrong-password'){
-                    dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'A senha é inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'});
+                    dispatch({ type: t.LOGIN_USUARIO_ERRO, payload: 'A senha é inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'});
                 }else{
                     dispatch({ type: t.LOGIN_USUARIO_ERRO, errorLogin: 'Ocorreu erro ao efetuar login.'});
                 }
@@ -203,24 +203,24 @@ function handleErrorsignInWithCredential(error, dispatch){
     var errorCode = error.code;
     var errorMessage = error.message;
     if ( errorCode === 'auth/account-exists-with-different-credential' ) {
-         dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
+         dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Já existir uma conta com o endereço de email declarado pela credencial.'} )
     } else if( errorCode === 'auth/invalid-credential' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Credencial malformatada ou expirada.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Credencial malformatada ou expirada.'} );
     } else if ( errorCode === 'auth/operation-not-allowed' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Tipo de conta correspondente à credencial não está ativado.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Tipo de conta correspondente à credencial não está ativado.'} );
 
     }  else if ( errorCode === 'auth/user-disabled' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Usuário desabilitado.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Usuário desabilitado.'} );
     }  else if ( errorCode === 'auth/user-not-found' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Não há usuário para o email fornecido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Não há usuário para o email fornecido.'} );
     } else if ( errorCode === 'auth/wrong-password' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Senha inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Senha inválida para o email fornecido ou a conta correspondente ao email não tem uma senha definida.'} );
     } else if ( errorCode === 'auth/invalid-verification-code' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Código de verificação da credencial inválido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Código de verificação da credencial inválido.'} );
     } else if ( errorCode === 'auth/invalid-verification-id' ){
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'ID de verificação da credencial inválido.'} );
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'ID de verificação da credencial inválido.'} );
     } else {
-        dispatch( {type: t.LOGIN_SOCIAL_ERRO, errorLogin: 'Ocorreu um erro durante atenticação do usuário.'} ); 
+        dispatch( {type: t.LOGIN_SOCIAL_ERRO, payload: 'Ocorreu um erro durante atenticação do usuário.'} ); 
     }
 }
 

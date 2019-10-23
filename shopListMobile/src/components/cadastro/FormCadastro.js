@@ -22,18 +22,21 @@ class  FormCadastro extends Component {
 
     onSubmit = () => {
       //this.setState({error: error}); //clear out error messages
-      data = {
+        data = {
         email: this.props.email,
         password: this.props.password,
         username: this.props.nomeUsuario
       }
-      console.log('data', data);
+      
       this.props.register(data)
           .then(() => Actions.home())
           .catch((error) => console.log(error))
   }
 
   render() {
+           const  errorCadastro = this.props.errorCadastro;
+           console.log('errorCadsatro', errorCadastro )
+
           return (
 
             <View style={styles.container}>
@@ -44,10 +47,13 @@ class  FormCadastro extends Component {
                 inputStyle={ {fontSize: 16, } }
                 placeholder="E-mail"
                 onChangeText={texto => this.props.modificaEmail(texto) }
-                value={ this.props.Email }
+                value={ this.props.email }
                 placeholderTextColor={AppStyles.color.grey}
                 underlineColorAndroid="transparent"
               />
+              <Text>
+                  
+              </Text>
             </View>
             <View style={{ paddingTop: 10 }} >
             <Input
@@ -65,6 +71,7 @@ class  FormCadastro extends Component {
                 containerStyle={ styles.input } 
                 inputStyle={ {fontSize: 16, } }
                 placeholder="Senha"
+                secureTextEntry={true}
                 onChangeText={texto => this.props.modificaSenha(texto) }
                 value={ this.props.senha }
                 placeholderTextColor={AppStyles.color.grey}
@@ -75,13 +82,16 @@ class  FormCadastro extends Component {
             <Input
                 containerStyle={ styles.input } 
                 inputStyle={ {fontSize: 16, } }
-                placeholder="Password"
+                placeholder="Confirmar senha"
                 secureTextEntry={true}
                 onChangeText={texto => this.props.modificaSenha(texto) }
                 value={ this.props.senha }
                 placeholderTextColor={AppStyles.color.grey}
                 underlineColorAndroid="transparent"
               />
+              <Text style={{ color: '#ff0000', fontSize: 20 }}>
+                  {this.props.errorCadastro}
+              </Text>
             </View>
             <View>
               <Button buttonStyle={[styles.buttonEnter, { marginTop: 50 }]}
@@ -101,14 +111,19 @@ class  FormCadastro extends Component {
 
 }
 
-const mapStateToProps = state => (
-  {
+const mapStateToProps = state => {
+  console.log('chamou mapStateToProps', state);
+  return (
+    {
       email: state.AutenticacaoReducer.email,
       password: state.AutenticacaoReducer.senha,
       nome: state.AutenticacaoReducer.nome,
-      nomeUsuario: state.AutenticacaoReducer.nomeUsuario
-  }
-)
+      nomeUsuario: state.AutenticacaoReducer.nomeUsuario,
+      errorCadastro: state.AutenticacaoReducer.errorCadastro
+    }
+  );
+}
+
 
 export default connect(mapStateToProps, 
   { modificaEmail, 
