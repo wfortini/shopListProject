@@ -37,7 +37,7 @@
     "graphql-fields": "^2.0.3",
     "graphql-tools": "^4.0.4",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pg": "^7.10.0",
     "puppeteer": "^1.16.0",
     "sequelize": "4.13.10",
